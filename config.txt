@@ -3,6 +3,8 @@
 outputPath = 
 # Create subfolder based on comic title?
 subfolderToggle = True
+# Get author comments?
+getComments = True
 
 [Comic]
 # What's the comic name?

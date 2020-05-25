@@ -25,10 +25,12 @@ imagePath = configparser.get('Comic', 'imagePath')
 driverOptions = webdriver.FirefoxOptions()
 driverOptions.headless = True
 driver = webdriver.Firefox(options=driverOptions)
-# fetch webpage
-driver.get("https://www.truefork.org/Art/comic/cindex.php?44")
 
 # Start looping per page here?
+
+# fetch webpage
+currentPageURL = "https://www.truefork.org/Art/comic/cindex.php?44"
+driver.get(currentPageURL)
 
 # Grab content elements based on the paths provided
 comicComment = driver.find_elements_by_xpath(commentPath)
@@ -60,18 +62,41 @@ elif imageNameType == "originalFilename":
 
 # Build the final file path for the image using the output dir, the image name, and the image extension
 imgSavePathFull = os.path.join(outputPath, imgSaveName + ext)
+# Build a similar file path for the text content
+txtSavePathFull = os.path.join(outputPath, imgSaveName + ".txt")
 
 print("Comic Title:   " + imageTitleText + "\nComic Comment: " + comicCommentHTML)
 print("Saving:  " + imageLocation + "\nTo path: " + imgSavePathFull)
 
+# Write out the image file with the imgSavePathFull we built and the imageLocationn we found
 with open(imgSavePathFull, 'wb') as handle:
-        response = requests.get(imageLocation, stream=True)
-        if not response.ok:
-            print (response)
-        for block in response.iter_content(1024):
-            if not block:
-                break
-            handle.write(block)
+    response = requests.get(imageLocation, stream=True)
+    if not response.ok:
+        print (response)
+    for block in response.iter_content(1024):
+        if not block:
+            break
+        handle.write(block)
+
+# Write out a txt (rtf? html?) file with the comic title and author comment
+with open(txtSavePathFull, 'w') as handle:
+    handle.write(imageTitleText + "\n")
+    handle.write(comicCommentHTML + "\n")
+    handle.write("Source: " + currentPageURL)
 
 # Close browser
 driver.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+

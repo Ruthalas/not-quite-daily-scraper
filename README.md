@@ -1,8 +1,8 @@
 # not-quite-daily-scraper
  Scraper for the '(not quite daily) Daily Comic'
 
-Currently under development
+ Currently under development
 
-Dependencies
-selenium
-ConfigParser
+ Dependencies:
+ selenium
+ geckDriver (https://github.com/mozilla/geckodriver/releases)

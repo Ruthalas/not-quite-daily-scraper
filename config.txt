@@ -7,3 +7,6 @@ subfolderToggle = True
 [Comic]
 # What's the comic name?
 comicName = (not quite) Daily Comic
+nextButtonPath = 
+imagePath = 
+commentPath = //*[@id="frame"]/div[4]/p

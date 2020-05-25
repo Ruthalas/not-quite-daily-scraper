@@ -1,0 +1,9 @@
+[General]
+# Leave outputPath blank to use the run directory.
+outputPath = 
+# Create subfolder based on comic title?
+subfolderToggle = True
+
+[Comic]
+# What's the comic name?
+comicName = (not quite) Daily Comic

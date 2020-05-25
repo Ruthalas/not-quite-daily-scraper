@@ -1,10 +1,12 @@
 [General]
 # Leave outputPath blank to use the run directory.
-outputPath = 
+outputPath = C:\Users\CASCA\OneDrive\USER\Code\not-quite-daily-scraper\IMG
 # Create subfolder based on comic title?
 subfolderToggle = True
 # Get author comments?
 getComments = True
+# Name image by? (title or originalFilename)
+imageNameType = title
 
 [Comic]
 # What's the comic name?

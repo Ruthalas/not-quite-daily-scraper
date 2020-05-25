@@ -1,5 +1,6 @@
 # Import modules we will be using
 import configparser
+import requests
 from selenium import webdriver
 
 # Pull in variables from config file
@@ -31,6 +32,17 @@ imageTitle = driver.find_elements_by_xpath(imageTitlePath)
 nextButton = driver.find_elements_by_xpath(nextButtonPath)
 
 print(imageTitle[0].text + "\n" + comicComment[0].get_attribute('innerHTML'))
+
+imageLocation = comicImage[0].get_attribute('src')
+
+with open('pic1.jpg', 'wb') as handle:
+        response = requests.get(imageLocation, stream=True)
+        if not response.ok:
+            print (response)
+        for block in response.iter_content(1024):
+            if not block:
+                break
+            handle.write(block)
 
 # Close browser
 driver.close()

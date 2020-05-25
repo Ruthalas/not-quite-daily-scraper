@@ -5,4 +5,4 @@
 
  Dependencies:
  selenium
- geckDriver (https://github.com/mozilla/geckodriver/releases)
+ geckoDriver (https://github.com/mozilla/geckodriver/releases)

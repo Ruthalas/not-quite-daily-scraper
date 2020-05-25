@@ -18,7 +18,9 @@ nextButtonPath = configparser.get('Comic', 'nextButtonPath')
 imagePath = configparser.get('Comic', 'imagePath')
 
 # Set up the browser we'll be using
-driver = webdriver.Firefox()
+driverOptions = webdriver.FirefoxOptions()
+driverOptions.headless = True
+driver = webdriver.Firefox(options=driverOptions)
 # fetch webpage
 driver.get("https://www.truefork.org/Art/comic/cindex.php?44")
 

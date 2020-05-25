@@ -111,7 +111,7 @@ while lastPage == False:
         workingFile.close()
 
     # Write out a txt file with the comic title and author comment (and source URL)
-    with open(txtSavePathFull, 'w') as workingFile:
+    with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
         textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p></center>" + comicCommentHTML 
         workingFile.write(textStr)
         workingFile.close()

@@ -1,6 +1,6 @@
 [General]
 # Leave outputPath blank to use the run directory.
-outputPath = C:\Users\CASCA\OneDrive\USER\Code\not-quite-daily-scraper\IMG
+outputPath = W:\DOCUMENT\COMICS (other)\(not quite) Daily Comic [Mr. Artist] (Running-Manual)
 # Create subfolder based on comic title?
 subfolderToggle = True
 # Get author comments?

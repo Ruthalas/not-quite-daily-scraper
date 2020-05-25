@@ -9,6 +9,7 @@ getComments = True
 [Comic]
 # What's the comic name?
 comicName = (not quite) Daily Comic
-nextButtonPath = 
-imagePath = 
+imageTitlePath = //*[@id="frame"]/div[2]
+nextButtonPath = //*[@id="frame"]/div[3]/div/center/table[2]/tbody/tr[1]/td[4]/a
+imagePath = //*[@id="frame"]/div[3]/div/center/img
 commentPath = //*[@id="frame"]/div[4]/p

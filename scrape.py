@@ -69,20 +69,20 @@ print("Comic Title:   " + imageTitleText + "\nComic Comment: " + comicCommentHTM
 print("Saving:  " + imageLocation + "\nTo path: " + imgSavePathFull)
 
 # Write out the image file with the imgSavePathFull we built and the imageLocationn we found
-with open(imgSavePathFull, 'wb') as handle:
+with open(imgSavePathFull, 'wb') as workingFile:
     response = requests.get(imageLocation, stream=True)
     if not response.ok:
-        print (response)
+        print ("Error saving image: " + response)
     for block in response.iter_content(1024):
         if not block:
             break
-        handle.write(block)
+        workingFile.write(block)
+    workingFile.close()
 
-# Write out a txt (rtf? html?) file with the comic title and author comment
-with open(txtSavePathFull, 'w') as handle:
-    handle.write(imageTitleText + "\n")
-    handle.write(comicCommentHTML + "\n")
-    handle.write("Source: " + currentPageURL)
+# Write out a txt file with the comic title and author comment (and source URL)
+with open(txtSavePathFull, 'w') as workingFile:
+    textStr = imageTitleText + "\n" + comicCommentHTML + "\nSource: " + currentPageURL
+    workingFile.write().close()
 
 # Close browser
 driver.close()

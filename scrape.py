@@ -94,7 +94,7 @@ while lastPage == False:
     # Build the final file path for the image using the output dir, the image name, and the image extension
     imgSavePathFull = os.path.join(outputPath, imgSaveName + ext)
     # Build a similar file path for the text content
-    txtSavePathFull = os.path.join(outputPath, imgSaveName + ".txt")
+    txtSavePathFull = os.path.join(outputPath, imgSaveName + ".html")
 
     print("Comic Title:   " + imageTitleText + "\nComic Comment: " + comicCommentHTML)
     print("Saving:  " + imageLocation + "\nTo path: " + imgSavePathFull)
@@ -112,7 +112,7 @@ while lastPage == False:
 
     # Write out a txt file with the comic title and author comment (and source URL)
     with open(txtSavePathFull, 'w') as workingFile:
-        textStr = imageTitleText + "\n" + comicCommentHTML + "\nSource: " + currentPageURL
+        textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p></center>" + comicCommentHTML 
         workingFile.write(textStr)
         workingFile.close()
 

@@ -33,6 +33,7 @@ configparser.read(configFilePath)
 outputPath = configparser.get('General', 'outputPath')
 subfolderToggle = configparser.get('General', 'subfolderToggle')
 getComments = configparser.get('General', 'getComments')
+getImage = configparser.get('General', 'getImage')
 imageNameType = configparser.get('General', 'imageNameType')
 # Comic group
 comicName = configparser.get('Comic', 'comicName')
@@ -127,32 +128,36 @@ while lastPage == False:
     print("  Comic Title: " + imageTitleText)
     print("  Saving: " + imageLocation + "\n  To path: " + imgSavePathFull)
 
-    # If the image file we are about to write doesn't already exist...
-    if not os.path.isfile(imgSavePathFull):
-        # Write out the image file with the imgSavePathFull we built and the imageLocationn we found
-        with open(imgSavePathFull, 'wb') as workingFile:
-            response = requests.get(imageLocation, stream=True)
-            if not response.ok:
-                print ("  Error saving image: " + response)
-            for block in response.iter_content(1024):
-                if not block:
-                    break
-                workingFile.write(block)
-            workingFile.close()
-            print("  Image saved.")
-    else:
-        print("  Image skipped. Found existing.")
+    # If the user requested we get the comic image
+    if getImage == "True":
+        # If the image file we are about to write doesn't already exist...
+        if not os.path.isfile(imgSavePathFull):
+            # Write out the image file with the imgSavePathFull we built and the imageLocationn we found
+            with open(imgSavePathFull, 'wb') as workingFile:
+                response = requests.get(imageLocation, stream=True)
+                if not response.ok:
+                    print ("  Error saving image: " + response)
+                for block in response.iter_content(1024):
+                    if not block:
+                        break
+                    workingFile.write(block)
+                workingFile.close()
+                print("  Image saved.")
+        else:
+            print("  Image skipped. Found existing.")
     
-    # If the text file we are about to write doesn't already exist...
-    if not os.path.isfile(txtSavePathFull):
-        # Write out a txt file with the comic title and author comment (and source URL)
-        with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
-            textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p></center>" + comicCommentHTML 
-            workingFile.write(textStr)
-            workingFile.close()
-            print("  Comment saved.")
-    else:
-        print("  Comment skipped. Found existing.")
+    # If the user has requested we get an author comment
+    if getComments == "True":
+        # If the text file we are about to write doesn't already exist...
+        if not os.path.isfile(txtSavePathFull):
+            # Write out a txt file with the comic title and author comment (and source URL) to the txtSavePathFull we built
+            with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
+                textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p></center>" + comicCommentHTML 
+                workingFile.write(textStr)
+                workingFile.close()
+                print("  Comment saved.")
+        else:
+            print("  Comment skipped. Found existing.")
 
     # Now that we are done getting all the content for this page,
     # set the currentPageURL to be the next page! 

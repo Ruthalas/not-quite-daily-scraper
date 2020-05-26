@@ -5,6 +5,8 @@ outputPath = W:\DOCUMENT\COMICS (other)\(not quite) Daily Comic [Mr. Artist] (Ru
 subfolderToggle = False
 # Get author comments?
 getComments = True
+# Get commic image?
+getImage = True
 # Name image by? (title or originalFilename)
 imageNameType = title
 

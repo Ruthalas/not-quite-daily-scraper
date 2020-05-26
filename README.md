@@ -20,7 +20,19 @@ Download the following dependencies to the project folder:
 ## Usage
 Create and fill out a config file for each comic you want to scrape.
 
-The key pieces of info are the xpaths to the comic's image, title, and next button
+Settings include:
+* Output Path (leave blank to use project directory)
+* Create Subfolder? (if enabled, creates subdir based on comic name)
+* Download Comments?
+* Download Image?
+* Image Naming (based on comic strip title or original image name)
+
+* Comic Name
+* comicStartPage (XPATH)
+* imageTitlePath (XPATH)
+* nextButtonPath (XPATH)
+* imagePath (XPATH)
+* commentPath (XPATH)
 
 Then run:
 

@@ -84,9 +84,11 @@ while lastPage == False:
     # If we found the page, let's open it in Gecko to start our parsing
     driver.get(currentPageURL)
 
-    # Grab content elements based on the paths provided
-    comicComment = driver.find_elements_by_xpath(commentPath)
-    comicImage = driver.find_elements_by_xpath(imagePath)
+    # Grab content elements based on the paths provided (skip ones the user has turned off)
+    if getComments == "True":
+        comicComment = driver.find_elements_by_xpath(commentPath)
+    if getImage == "True":
+        comicImage = driver.find_elements_by_xpath(imagePath)
     imageTitle = driver.find_elements_by_xpath(imageTitlePath)
     nextButton = driver.find_elements_by_xpath(nextButtonPath)
 
@@ -95,9 +97,11 @@ while lastPage == False:
         print("\nNo next page button found on this page.\nWe've likely hit the current page!")
         break
 
-    # Extract content out of those elements
-    comicCommentHTML = comicComment[0].get_attribute('innerHTML')
-    imageLocation = comicImage[0].get_attribute('src')
+    # Extract content out of those elements (skip ones the user has turned off)
+    if getComments == "True":
+        comicCommentHTML = comicComment[0].get_attribute('innerHTML')
+    if getImage == "True":
+        imageLocation = comicImage[0].get_attribute('src')
     imageTitleText = imageTitle[0].text
     nextButtonLocation = nextButton[0].get_attribute('href')
 

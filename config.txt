@@ -4,7 +4,7 @@ outputPath = W:\DOCUMENT\COMICS (other)\(not quite) Daily Comic [Mr. Artist] (Ru
 # Create subfolder based on comic title?
 subfolderToggle = False
 # Get author comments?
-getComments = True
+getComments = False
 # Get commic image?
 getImage = True
 # Name image by? (title or originalFilename)
@@ -17,4 +17,4 @@ comicStartPage = https://www.truefork.org/Art/comic/cindex.php?816
 imageTitlePath = //*[@id="frame"]/div[2]
 nextButtonPath = //*[@id="frame"]/div[3]/div/center/table[2]/tbody/tr[1]/td[4]/a
 imagePath = //*[@id="frame"]/div[3]/div/center/img
-commentPath = //*[@id="frame"]/div[4]
+commentPath = 

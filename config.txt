@@ -2,7 +2,7 @@
 # Leave outputPath blank to use the run directory.
 outputPath = W:\DOCUMENT\COMICS (other)\(not quite) Daily Comic [Mr. Artist] (Running-Manual)
 # Create subfolder based on comic title?
-subfolderToggle = True
+subfolderToggle = False
 # Get author comments?
 getComments = True
 # Name image by? (title or originalFilename)

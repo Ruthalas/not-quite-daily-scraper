@@ -44,13 +44,24 @@ imagePath = configparser.get('Comic', 'imagePath')
 
 print("Config settings imported.")
 
+# If the user requested a subfolder, append it to the current outputPath
+if subfolderToggle == "True":
+    outputPath = os.path.join(outputPath, comicName)
+
+# Check if the desired output directory exists, if not, create it
+if not os.path.isdir(outputPath):
+    print("Output directory does not yet exist, creating.")
+    os.mkdir(outputPath)
+else:
+    print("Output directory found.")
+
 # Set up the browser we'll be using
 driverOptions = webdriver.FirefoxOptions()
 driverOptions.set_preference("general.useragent.override", "Not Quite Daily Scraper")
 driverOptions.headless = True
 driver = webdriver.Firefox(options=driverOptions)
 
-print("Beginning to scrape " + comicName)
+print("Browser created. Beginning to scrape " + comicName)
 
 # Start with current page, and begin grabbing contents
 # (Each loop will reset currentPageURL to the next page, via the contents of the next button)
@@ -107,7 +118,7 @@ while lastPage == False:
     elif imageNameType == "originalFilename":
         # Set image save name to original image name (based on URL)
         imgSaveName = originalImageName
-
+    
     # Build the final file path for the image using the output dir, the image name, and the image extension
     imgSavePathFull = os.path.join(outputPath, imgSaveName + ext)
     # Build a similar file path for the text content

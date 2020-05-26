@@ -1,5 +1,5 @@
 # not-quite-daily-scraper
->A simple scraper for the simple webcomics. 
+>A simple scraper for simple webcomics. 
 
 Included example is for the '(not quite) Daily Comic'.
 

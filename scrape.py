@@ -105,9 +105,6 @@ while lastPage == False:
     imageTitleText = imageTitle[0].text
     nextButtonLocation = nextButton[0].get_attribute('href')
 
-    # Lets quickly remove any characters from that title that may cause issues later
-    imageTitleText = sanitizeString(imageTitleText)
-
     # Get the file extension from the URL
     URLpath = urlparse(imageLocation).path
     ext = os.path.splitext(URLpath)[1]
@@ -123,6 +120,9 @@ while lastPage == False:
     elif imageNameType == "originalFilename":
         # Set image save name to original image name (based on URL)
         imgSaveName = originalImageName
+    
+    # Lets quickly remove any characters from that title that may cause issues later
+    imgSaveName = sanitizeString(imgSaveName)
     
     # Build the final file path for the image using the output dir, the image name, and the image extension
     imgSavePathFull = os.path.join(outputPath, imgSaveName + ext)

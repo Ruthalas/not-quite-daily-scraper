@@ -55,9 +55,8 @@ while lastPage == False:
         # Nice! The page exists and returns a good code
         print('\nAccessing page: ' + currentPageURL)
     else:
-        # If we can't find the current page, we likely reached the end
-        # Let the user know and break out of the while loop
-        print('\nPage unavailable: ' + currentPageURL)
+        # If we can't find the current page, let the user know and break out of the while loop
+        print('\nPage unavailable: ' + currentPageURL)      
         break
     
     # If we found the page, let's open it in Gecko to start our parsing
@@ -68,6 +67,11 @@ while lastPage == False:
     comicImage = driver.find_elements_by_xpath(imagePath)
     imageTitle = driver.find_elements_by_xpath(imageTitlePath)
     nextButton = driver.find_elements_by_xpath(nextButtonPath)
+
+    # Check to see if a next button exists, if not, break
+    if len(nextButton) < 1:
+        print("\nNo next page button found on this page.\nWe've likely hit the current page!")
+        break
 
     # Extract content out of those elements
     comicCommentHTML = comicComment[0].get_attribute('innerHTML')
@@ -136,7 +140,7 @@ while lastPage == False:
 # Close browser
 driver.close()
 
-print("All available pages scraped! Exiting.")
+print("\nAll available pages scraped! Exiting.")
 
 
 

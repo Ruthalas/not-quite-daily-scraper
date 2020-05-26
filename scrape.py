@@ -97,12 +97,11 @@ while lastPage == False:
         print("\nNo next page button found on this page.\nWe've likely hit the current page!")
         break
 
-    # Extract content out of those elements (skip ones the user has turned off)
+    # Extract comment html, the image url, and the next button url out of those elements (skipping ones the user has turned off)
     if getComments == "True":
         comicCommentHTML = comicComment[0].get_attribute('innerHTML')
     if getImage == "True":
         imageLocation = comicImage[0].get_attribute('src')
-    imageTitleText = imageTitle[0].text
     nextButtonLocation = nextButton[0].get_attribute('href')
 
     # Get the file extension from the URL
@@ -112,6 +111,13 @@ while lastPage == False:
     # Get the original image name from the URL
     urlParts = os.path.splitext(URLpath)[0].split("/")
     originalImageName = urlParts[len(urlParts)-1] # (It's the last part when split on '/')
+    
+    # Attempt to get the title text (if unavailable, use originalImageName)
+    try:
+        imageTitleText = imageTitle[0].text
+    except:
+        print("  Image title not found, substituting original image filename")
+        imageTitleText = originalImageName
 
     # Name the output image file based on the imageNameType toggle
     if imageNameType == "title":

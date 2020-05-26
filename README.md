@@ -1,6 +1,8 @@
 # not-quite-daily-scraper
 >A simple scraper for simple webcomics. 
 
+Download images and comment sections with ease, utilizing a simple config file.
+
 Included example is for the '(not quite) Daily Comic'.
 
 Currently under development.

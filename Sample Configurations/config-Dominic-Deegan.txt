@@ -1,0 +1,25 @@
+[General]
+# Path to output directory (leave blank to use the project directory)
+outputPath = W:\DOCUMENT\COMICS (other)\Dominic Deegan- Oracle for Hire [Michael Terracciano] (Complete-NQDS)
+# Create subfolder based on comic title? (True or False)
+subfolderToggle = False
+# Get author comments? (True or False)
+getComments = False
+# Get commic image? (True or False)
+getImage = True
+# Name image by? (title or originalFilename)
+imageNameType = originalFilename
+
+[Comic]
+# What's the comic name? (used to make subfolder if enabled above)
+comicName = The Legacy of Dominic Deegan
+# What is the first page you'd like to start traversing at? (consider setting to recent page if running updates)
+comicStartPage = https://www.dominic-deegan.com/comic/0298-20030524/
+# XPATH to the image or page title
+imageTitlePath = //*[@id="content-bottom-widgets"]/div/div/table/tbody/tr[1]/td/span[1]/a
+# XPATH to the next button
+nextButtonPath = //*[@id="content-bottom-widgets"]/div/div/table/tbody/tr[2]/td[3]/a
+# XPATH to the comic image itself (optional, toggle off above if blank)
+imagePath = /html/body/div[1]/div/div/div/main/article/div[1]/img
+# XPATH to the author comment, if applicable (optional, toggle off above if blank)
+commentPath = 

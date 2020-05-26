@@ -36,8 +36,11 @@ imagePath = configparser.get('Comic', 'imagePath')
 
 # Set up the browser we'll be using
 driverOptions = webdriver.FirefoxOptions()
+driverOptions.set_preference("general.useragent.override", "Not Quite Daily Scraper")
 driverOptions.headless = True
 driver = webdriver.Firefox(options=driverOptions)
+
+print("Beginning to scrape " + comicName)
 
 # Start with current page, and begin grabbing contents
 # (Each loop will reset currentPageURL to the next page, via the contents of the next button)
@@ -50,11 +53,11 @@ while lastPage == False:
     request = requests.get(currentPageURL)
     if request.status_code == 200:
         # Nice! The page exists and returns a good code
-        print('Found page: ' + currentPageURL)
+        print('\nAccessing page: ' + currentPageURL)
     else:
         # If we can't find the current page, we likely reached the end
         # Let the user know and break out of the while loop
-        print('Page not found: ' + currentPageURL)
+        print('\nPage unavailable: ' + currentPageURL)
         break
     
     # If we found the page, let's open it in Gecko to start our parsing
@@ -96,25 +99,33 @@ while lastPage == False:
     # Build a similar file path for the text content
     txtSavePathFull = os.path.join(outputPath, imgSaveName + ".html")
 
-    print("Comic Title:   " + imageTitleText + "\nComic Comment: " + comicCommentHTML)
-    print("Saving:  " + imageLocation + "\nTo path: " + imgSavePathFull)
+    print("  Comic Title: " + imageTitleText)
+    print("  Saving: " + imageLocation + "\n  To path: " + imgSavePathFull)
 
-    # Write out the image file with the imgSavePathFull we built and the imageLocationn we found
-    with open(imgSavePathFull, 'wb') as workingFile:
-        response = requests.get(imageLocation, stream=True)
-        if not response.ok:
-            print ("Error saving image: " + response)
-        for block in response.iter_content(1024):
-            if not block:
-                break
-            workingFile.write(block)
-        workingFile.close()
-
-    # Write out a txt file with the comic title and author comment (and source URL)
-    with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
-        textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p></center>" + comicCommentHTML 
-        workingFile.write(textStr)
-        workingFile.close()
+    # If the image file we are about to write doesn't already exist...
+    if not os.path.isfile(imgSavePathFull):
+        # Write out the image file with the imgSavePathFull we built and the imageLocationn we found
+        with open(imgSavePathFull, 'wb') as workingFile:
+            response = requests.get(imageLocation, stream=True)
+            if not response.ok:
+                print ("  Error saving image: " + response)
+            for block in response.iter_content(1024):
+                if not block:
+                    break
+                workingFile.write(block)
+            workingFile.close()
+    else:
+        print("  Found existing, skipping image save.")
+    
+    # If the text file we are about to write doesn't already exist...
+    if not os.path.isfile(txtSavePathFull):
+        # Write out a txt file with the comic title and author comment (and source URL)
+        with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
+            textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p></center>" + comicCommentHTML 
+            workingFile.write(textStr)
+            workingFile.close()
+    else:
+        print("  Found existing, skipping comment save.")
 
     # Now that we are done getting all the content for this page,
     # set the currentPageURL to be the next page! 

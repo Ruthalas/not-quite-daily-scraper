@@ -3,7 +3,7 @@
 
 Included example is for the '(not quite) Daily Comic'.
 
-Currently under development
+Currently under development.
 
 ## Setup
 
@@ -17,11 +17,13 @@ Download the following dependencies to the project folder:
  
 ## Usage
 Fill out the config.txt
+
 The key pieces of info are the xpaths to the comic's image, title, and next button
+
 Then run:
 
 ```
-python scraper.py -config NQDC-config.txt
+python scraper.py
 ```
  
 ## Psuedocode

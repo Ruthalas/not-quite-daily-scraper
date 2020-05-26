@@ -2,6 +2,7 @@
 import configparser
 import requests
 import os
+import sys
 from urllib.parse import urlparse
 from selenium import webdriver
 
@@ -17,9 +18,16 @@ def sanitizeString(stringToClean):
             stringToClean = stringToClean.replace(elem, replacementChar)
     return stringToClean
 
+
+if not os.path.isfile(sys.argv[1]):
+    print("Please provide a valid file for the config.\nYour provided: " + str(sys.argv[1]))
+    raise SystemExit(0)
+else:
+    print("Config file found.")
+    configFilePath = sys.argv[1]
+
 # Pull in variables from config file
-configparser = configparser.RawConfigParser()   
-configFilePath = r'config.txt'
+configparser = configparser.RawConfigParser()
 configparser.read(configFilePath)
 # General group
 outputPath = configparser.get('General', 'outputPath')
@@ -33,6 +41,8 @@ commentPath = configparser.get('Comic', 'commentPath')
 imageTitlePath = configparser.get('Comic', 'imageTitlePath')
 nextButtonPath = configparser.get('Comic', 'nextButtonPath')
 imagePath = configparser.get('Comic', 'imagePath')
+
+print("Config settings imported.")
 
 # Set up the browser we'll be using
 driverOptions = webdriver.FirefoxOptions()

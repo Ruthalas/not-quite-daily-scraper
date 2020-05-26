@@ -43,6 +43,7 @@ python scraper.py NQDC-Config.txt
 ## Psuedocode
 
 * Gather variables from config file
+* Build output directory path, and create it if it does not exist
 * Open headless firefox instance with selenium
 * Loop through pages, setting each new page based on the 'next' link
     * Gather relevant page elements

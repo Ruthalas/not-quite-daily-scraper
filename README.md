@@ -20,7 +20,8 @@ Fill out the config.txt
 The key pieces of info are the xpaths to the comic's image, title, and next button
 Then run:
 
-```python scraper.py -config NQDC-config.txt
+```
+python scraper.py -config NQDC-config.txt
 ```
  
 ## Psuedocode

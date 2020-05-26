@@ -14,7 +14,7 @@ Download repo
 Install the following dependencies:
 * selenium (pip3 install selenium)
  
-Download the following dependencies to the project folder:
+Download the following dependencies and install them to PATH (Windows):
 * geckoDriver (https://github.com/mozilla/geckodriver/releases)
  
 ## Usage

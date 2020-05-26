@@ -170,7 +170,7 @@ while lastPage == False:
 # Close browser
 driver.close()
 
-print("\nAll available pages scraped! Exiting.")
+print("\nAll available pages scraped. Exiting.")
 
 
 

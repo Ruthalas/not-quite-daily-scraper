@@ -114,8 +114,9 @@ while lastPage == False:
                     break
                 workingFile.write(block)
             workingFile.close()
+            print("  Image saved.")
     else:
-        print("  Found existing, skipping image save.")
+        print("  Image skipped. Found existing.")
     
     # If the text file we are about to write doesn't already exist...
     if not os.path.isfile(txtSavePathFull):
@@ -124,8 +125,9 @@ while lastPage == False:
             textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p></center>" + comicCommentHTML 
             workingFile.write(textStr)
             workingFile.close()
+            print("  Comment saved.")
     else:
-        print("  Found existing, skipping comment save.")
+        print("  Comment skipped. Found existing.")
 
     # Now that we are done getting all the content for this page,
     # set the currentPageURL to be the next page! 

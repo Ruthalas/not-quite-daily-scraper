@@ -41,6 +41,7 @@ comicStartPage = configparser.get('Comic', 'comicStartPage')
 commentPath = configparser.get('Comic', 'commentPath')
 imageTitlePath = configparser.get('Comic', 'imageTitlePath')
 nextButtonPath = configparser.get('Comic', 'nextButtonPath')
+nextButtonType = configparser.get('Comic', 'nextButtonType')
 imagePath = configparser.get('Comic', 'imagePath')
 
 print("Config settings imported.")
@@ -68,28 +69,35 @@ print("Browser created. Beginning to scrape " + comicName)
 # (Each loop will reset currentPageURL to the next page, via the contents of the next button)
 currentPageURL = comicStartPage
 
+comicCommentHTML = ""
 lastPage = False
 while lastPage == False:
 
-    # First try the webpage and makes sure it returns a good error code
-    request = requests.get(currentPageURL)
-    if request.status_code == 200:
-        # Nice! The page exists and returns a good code
-        print('\nAccessing page: ' + currentPageURL)
-    else:
-        # If we can't find the current page, let the user know and break out of the while loop
-        print('\nPage unavailable: ' + currentPageURL)      
-        break
+    # (currentPageURL will be set to "" if we are using javaClick to procede through pages)
+    # If this is not the case, load the next page with GET
+    if currentPageURL != "":
+        # First try the webpage and makes sure it returns a good error code
+        request = requests.get(currentPageURL)
+        if request.status_code == 200:
+            # Nice! The page exists and returns a good code
+            print('\nAccessing page: ' + currentPageURL)
+        else:
+            # If we can't find the current page, let the user know and break out of the while loop
+            print('\nPage unavailable: ' + currentPageURL)      
+            break
     
-    # If we found the page, let's open it in Gecko to start our parsing
-    driver.get(currentPageURL)
+        # If we found the page, let's open it in Gecko to start our parsing
+        driver.get(currentPageURL)
 
     # Grab content elements based on the paths provided (skip ones the user has turned off)
     if getComments == "True":
         comicComment = driver.find_elements_by_xpath(commentPath)
     if getImage == "True":
         comicImage = driver.find_elements_by_xpath(imagePath)
-    imageTitle = driver.find_elements_by_xpath(imageTitlePath)
+    if imageTitlePath != "":
+        imageTitle = driver.find_elements_by_xpath(imageTitlePath)
+    else:
+        imageTitle = ""
     nextButton = driver.find_elements_by_xpath(nextButtonPath)
 
     # Check to see if a next button exists, if not, break
@@ -106,7 +114,9 @@ while lastPage == False:
             comicCommentHTML = comicComment[0].get_attribute('innerHTML')
     if getImage == "True":
         imageLocation = comicImage[0].get_attribute('src')
-    nextButtonLocation = nextButton[0].get_attribute('href')
+    
+    if nextButtonType == "link":
+        nextButtonLocation = nextButton[0].get_attribute('href')
 
     # Get the file extension from the URL
     URLpath = urlparse(imageLocation).path
@@ -172,10 +182,15 @@ while lastPage == False:
                 print("  Comment saved.")
         else:
             print("  Comment skipped. Found existing.")
-
-    # Now that we are done getting all the content for this page,
-    # set the currentPageURL to be the next page! 
-    currentPageURL = nextButtonLocation
+            
+    # Now that we are done getting all the content for this page...
+    if nextButtonType == "javaClick":
+        # Either click the next button via javascript or...
+        javaNextButton = driver.find_element_by_xpath('//*[@id="content"]/img').click()
+        currentPageURL = ""
+    else:
+        # set the currentPageURL to be the next page! 
+        currentPageURL = nextButtonLocation
 
 # Close browser
 driver.close()

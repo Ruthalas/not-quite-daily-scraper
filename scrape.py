@@ -180,6 +180,8 @@ while endLoop == False:
         else:
             print("  Comment skipped. Found existing.")
 
+    # Time to try and navigate to the next page!
+
     # Get the element that is the next button
     nextButton = driver.find_elements_by_xpath(nextButtonPath)
     
@@ -187,6 +189,9 @@ while endLoop == False:
     if len(nextButton) < 1:
         print("\nNo next page button found on this page.\nWe've likely hit the current page!")
         break
+    
+    #cache the current URL to check against after we attempt to move to the next page
+    mostRecentURL = driver.current_url
     
     # If the nextButtonType is a basic link, parse it out of the element and attempt to navigate there
     if nextButtonType == "link":
@@ -209,6 +214,11 @@ while endLoop == False:
     elif nextButtonType == "javaClick":
         javaNextButton = nextButton[0].click()
         print('\nAccessing page: ' + driver.current_url)
+    
+    # check against the cached url to see if we successfully advanced a page. If not, break
+    if mostRecentURL == driver.current_url:
+        print("\nScript not successfully advancing pages.\nWe've either hit the current page or an error!")
+        break
 
 # Close browser
 driver.close()

@@ -60,7 +60,7 @@ else:
 # Set up the browser we'll be using
 driverOptions = webdriver.FirefoxOptions()
 driverOptions.set_preference("general.useragent.override", "Not Quite Daily Scraper")
-driverOptions.headless = True
+driverOptions.headless = False
 driver = webdriver.Firefox(options=driverOptions)
 
 print("Browser created. Beginning to scrape " + comicName)
@@ -106,6 +106,8 @@ while lastPage == False:
         break
 
     # Extract comment html, the image url, and the next button url out of those elements (skipping ones the user has turned off)
+    # Also save a copy of what the comment was last time, so we don't write out duplicates
+    previousCommentHTML = comicCommentHTML
     if getComments == "True":
         # If there isn't anything in the comment element, just leave it blank
         if len(comicComment) < 1:
@@ -117,6 +119,8 @@ while lastPage == False:
     
     if nextButtonType == "link":
         nextButtonLocation = nextButton[0].get_attribute('href')
+    elif nextButtonType == "javaClick":
+        nextButtonLocation = nextButtonPath
 
     # Get the file extension from the URL
     URLpath = urlparse(imageLocation).path
@@ -170,8 +174,8 @@ while lastPage == False:
         else:
             print("  Image skipped. Found existing.")
     
-    # If the user has requested we get an author comment, and this particular strip has one
-    if (getComments == "True") and (comicCommentHTML != ""):
+    # If the user has requested we get an author comment, and this particular strip has one, and it's new
+    if (getComments == "True") and (comicCommentHTML != "") and (comicCommentHTML != previousCommentHTML):
         # If the text file we are about to write doesn't already exist...
         if not os.path.isfile(txtSavePathFull):
             # Write out a txt file with the comic title and author comment (and source URL) to the txtSavePathFull we built
@@ -182,11 +186,11 @@ while lastPage == False:
                 print("  Comment saved.")
         else:
             print("  Comment skipped. Found existing.")
-            
+    
     # Now that we are done getting all the content for this page...
     if nextButtonType == "javaClick":
         # Either click the next button via javascript or...
-        javaNextButton = driver.find_element_by_xpath('//*[@id="content"]/img').click()
+        javaNextButton = driver.find_element_by_xpath(nextButtonLocation).click()
         currentPageURL = ""
     else:
         # set the currentPageURL to be the next page! 

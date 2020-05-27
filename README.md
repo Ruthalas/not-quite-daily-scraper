@@ -31,7 +31,7 @@ Settings include:
 * comicStartPage (XPATH)
 * imageTitlePath (XPATH)
 * nextButtonPath (XPATH)
-* nextButtonType (accpets either link or javaClick, representing whether the button has an href or must be clicked)
+* nextButtonType (accepts either link or javaClick, representing whether the button has an href or must be clicked)
 * imagePath (XPATH)
 * commentPath (XPATH)
 

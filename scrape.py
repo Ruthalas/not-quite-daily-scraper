@@ -35,6 +35,7 @@ subfolderToggle = configparser.get('General', 'subfolderToggle')
 getComments = configparser.get('General', 'getComments')
 getImage = configparser.get('General', 'getImage')
 imageNameType = configparser.get('General', 'imageNameType')
+runHeadless = configparser.get('General', 'runHeadless')
 # Comic group
 comicName = configparser.get('Comic', 'comicName')
 comicStartPage = configparser.get('Comic', 'comicStartPage')
@@ -60,7 +61,10 @@ else:
 # Set up the browser we'll be using
 driverOptions = webdriver.FirefoxOptions()
 driverOptions.set_preference("general.useragent.override", "Not Quite Daily Scraper")
-driverOptions.headless = False
+if runHeadless == "True":
+    driverOptions.headless = True
+elif runHeadless == "False":
+    driverOptions.headless = False
 driver = webdriver.Firefox(options=driverOptions)
 
 print("Browser created. Beginning to scrape " + comicName)

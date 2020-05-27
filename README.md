@@ -26,6 +26,7 @@ Settings include:
 * Download Comments?
 * Download Image?
 * Image Naming (based on comic strip title or original image name)
+* Run Headless? (run without showing the browser window- disable for troublshooting)
 
 * Comic Name
 * comicStartPage (XPATH)

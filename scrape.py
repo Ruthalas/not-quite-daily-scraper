@@ -65,13 +65,23 @@ driver = webdriver.Firefox(options=driverOptions)
 
 print("Browser created. Beginning to scrape " + comicName)
 
-# Start with current page, and begin grabbing contents
-# (Each loop will reset currentPageURL to the next page, via the contents of the next button)
-currentPageURL = comicStartPage
-
+# Prep the loop variables
 comicCommentHTML = ""
-lastPage = False
-while lastPage == False:
+endLoop = False
+
+# Attempt to load the comicStartPage page, if successful begin loop, if not skip loop (end)
+request = requests.get(comicStartPage)
+if request.status_code == 200:
+    # Nice! The page exists and returns a good code
+    print('\nAccessing start page page: ' + comicStartPage)
+else:
+    # If we can't find the current page, let the user know and break out of the while loop
+    print('\nStart page unavailable: ' + comicStartPage)      
+    endLoop = True
+# If we found the page, let's open it in Gecko to start our parsing
+driver.get(comicStartPage)
+
+while endLoop == False:
     
     # Get the URL of the current page, regardless of navigation method
     currentPageURL = driver.current_url
@@ -166,11 +176,10 @@ while lastPage == False:
         else:
             print("  Comment skipped. Found existing.")
 
-
     # Get the element that is the next button
     nextButton = driver.find_elements_by_xpath(nextButtonPath)
     
-    # If we found no matching elements, break out of the loop
+    # If we found no matching (nextbutton) elements, break out of the loop
     if len(nextButton) < 1:
         print("\nNo next page button found on this page.\nWe've likely hit the current page!")
         break
@@ -194,7 +203,8 @@ while lastPage == False:
         
     # If the nextButtonType is javaClick, instead of parsing the next object, just click it
     elif nextButtonType == "javaClick":
-        javaNextButton = nextButton.click()
+        javaNextButton = nextButton[0].click()
+        print('\nAccessing page: ' + driver.current_url)
 
 # Close browser
 driver.close()

@@ -99,7 +99,11 @@ while lastPage == False:
 
     # Extract comment html, the image url, and the next button url out of those elements (skipping ones the user has turned off)
     if getComments == "True":
-        comicCommentHTML = comicComment[0].get_attribute('innerHTML')
+        # If there isn't anything in the comment element, just leave it blank
+        if len(comicComment) < 1:
+            comicCommentHTML = ""
+        else:
+            comicCommentHTML = comicComment[0].get_attribute('innerHTML')
     if getImage == "True":
         imageLocation = comicImage[0].get_attribute('src')
     nextButtonLocation = nextButton[0].get_attribute('href')
@@ -156,8 +160,8 @@ while lastPage == False:
         else:
             print("  Image skipped. Found existing.")
     
-    # If the user has requested we get an author comment
-    if getComments == "True":
+    # If the user has requested we get an author comment, and this particular strip has one
+    if (getComments == "True") and (comicCommentHTML != ""):
         # If the text file we are about to write doesn't already exist...
         if not os.path.isfile(txtSavePathFull):
             # Write out a txt file with the comic title and author comment (and source URL) to the txtSavePathFull we built

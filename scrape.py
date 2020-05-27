@@ -72,22 +72,9 @@ currentPageURL = comicStartPage
 comicCommentHTML = ""
 lastPage = False
 while lastPage == False:
-
-    # (currentPageURL will be set to "" if we are using javaClick to procede through pages)
-    # If this is not the case, load the next page with GET
-    if currentPageURL != "":
-        # First try the webpage and makes sure it returns a good error code
-        request = requests.get(currentPageURL)
-        if request.status_code == 200:
-            # Nice! The page exists and returns a good code
-            print('\nAccessing page: ' + currentPageURL)
-        else:
-            # If we can't find the current page, let the user know and break out of the while loop
-            print('\nPage unavailable: ' + currentPageURL)      
-            break
     
-        # If we found the page, let's open it in Gecko to start our parsing
-        driver.get(currentPageURL)
+    # Get the URL of the current page, regardless of navigation method
+    currentPageURL = driver.current_url
 
     # Grab content elements based on the paths provided (skip ones the user has turned off)
     if getComments == "True":
@@ -98,12 +85,6 @@ while lastPage == False:
         imageTitle = driver.find_elements_by_xpath(imageTitlePath)
     else:
         imageTitle = ""
-    nextButton = driver.find_elements_by_xpath(nextButtonPath)
-
-    # Check to see if a next button exists, if not, break
-    if len(nextButton) < 1:
-        print("\nNo next page button found on this page.\nWe've likely hit the current page!")
-        break
 
     # Extract comment html, the image url, and the next button url out of those elements (skipping ones the user has turned off)
     # Also save a copy of what the comment was last time, so we don't write out duplicates
@@ -116,11 +97,6 @@ while lastPage == False:
             comicCommentHTML = comicComment[0].get_attribute('innerHTML')
     if getImage == "True":
         imageLocation = comicImage[0].get_attribute('src')
-    
-    if nextButtonType == "link":
-        nextButtonLocation = nextButton[0].get_attribute('href')
-    elif nextButtonType == "javaClick":
-        nextButtonLocation = nextButtonPath
 
     # Get the file extension from the URL
     URLpath = urlparse(imageLocation).path
@@ -174,6 +150,9 @@ while lastPage == False:
         else:
             print("  Image skipped. Found existing.")
     
+    # Clear out javascript warning from comment, if it is present
+    comicCommentHTML = comicCommentHTML.replace("<noscript>Javascript is required to view this site. Please enable Javascript in your browser and reload this page.</noscript>","")
+    
     # If the user has requested we get an author comment, and this particular strip has one, and it's new
     if (getComments == "True") and (comicCommentHTML != "") and (comicCommentHTML != previousCommentHTML):
         # If the text file we are about to write doesn't already exist...
@@ -186,15 +165,36 @@ while lastPage == False:
                 print("  Comment saved.")
         else:
             print("  Comment skipped. Found existing.")
+
+
+    # Get the element that is the next button
+    nextButton = driver.find_elements_by_xpath(nextButtonPath)
     
-    # Now that we are done getting all the content for this page...
-    if nextButtonType == "javaClick":
-        # Either click the next button via javascript or...
-        javaNextButton = driver.find_element_by_xpath(nextButtonLocation).click()
-        currentPageURL = ""
-    else:
-        # set the currentPageURL to be the next page! 
-        currentPageURL = nextButtonLocation
+    # If we found no matching elements, break out of the loop
+    if len(nextButton) < 1:
+        print("\nNo next page button found on this page.\nWe've likely hit the current page!")
+        break
+    
+    # If the nextButtonType is a basic link, parse it out of the element and attempt to navigate there
+    if nextButtonType == "link":
+        nextButtonURL = nextButton[0].get_attribute('href')
+        currentPageURL = nextButtonURL
+        
+        # First try the webpage and makes sure it returns a good error code
+        request = requests.get(nextButtonURL)
+        if request.status_code == 200:
+            # Nice! The page exists and returns a good code
+            print('\nAccessing page: ' + nextButtonURL)
+        else:
+            # If we can't find the current page, let the user know and break out of the while loop
+            print('\nPage unavailable: ' + nextButtonURL)      
+            break
+        # If we found the page, let's open it in Gecko to start our parsing
+        driver.get(nextButtonURL)
+        
+    # If the nextButtonType is javaClick, instead of parsing the next object, just click it
+    elif nextButtonType == "javaClick":
+        javaNextButton = nextButton.click()
 
 # Close browser
 driver.close()

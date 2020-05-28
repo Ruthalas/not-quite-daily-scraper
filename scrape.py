@@ -77,10 +77,10 @@ endLoop = False
 request = requests.get(comicStartPage)
 if request.status_code == 200:
     # Nice! The page exists and returns a good code
-    print('\nAccessing start page page: ' + comicStartPage)
+    print('\nAccessing start page: ' + comicStartPage)
 else:
     # If we can't find the current page, let the user know and break out of the while loop
-    print('\nStart page unavailable: ' + comicStartPage)      
+    print('\nStart page unavailable: ' + comicStartPage + "\nRequest yielded: " + str(request.status_code))
     endLoop = True
 # If we found the page, let's open it in Gecko to start our parsing
 driver.get(comicStartPage)
@@ -205,7 +205,7 @@ while endLoop == False:
             print('\nAccessing page: ' + nextButtonURL)
         else:
             # If we can't find the current page, let the user know and break out of the while loop
-            print('\nPage unavailable: ' + nextButtonURL)      
+            print('\nPage unavailable: ' + nextButtonURL + "\nRequest yielded: " + str(request.status_code))
             break
         # If we found the page, let's open it in Gecko to start our parsing
         driver.get(nextButtonURL)

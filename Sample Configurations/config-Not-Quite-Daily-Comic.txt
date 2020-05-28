@@ -9,6 +9,8 @@ getComments = True
 getImage = True
 # Name image by? (title or originalFilename)
 imageNameType = title
+# Hide the webbrowsing window while it runs? (True of False)
+runHeadless = False
 
 [Comic]
 # What's the comic name? (used to make subfolder if enabled above)
@@ -19,6 +21,8 @@ comicStartPage = https://www.truefork.org/Art/comic/cindex.php?816
 imageTitlePath = //*[@id="frame"]/div[2]
 # XPATH to the next button
 nextButtonPath = //*[@id="frame"]/div[3]/div/center/table[2]/tbody/tr[1]/td[4]/a
+# Next button type (link or javaClick)
+nextButtonType = link
 # XPATH to the comic image itself (optional, toggle off above if blank)
 imagePath = //*[@id="frame"]/div[3]/div/center/img
 # XPATH to the author comment, if applicable (optional, toggle off above if blank)

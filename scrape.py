@@ -3,6 +3,7 @@ import configparser
 import requests
 import os
 import sys
+import time
 from urllib.parse import urlparse
 from selenium import webdriver
 
@@ -214,6 +215,10 @@ while endLoop == False:
     elif nextButtonType == "javaClick":
         javaNextButton = nextButton[0].click()
         print('\nAccessing page: ' + driver.current_url)
+        # This sleep alleviates a scenario where the javaClick could cycle a page
+        # without giving the page time to actually respond,
+        # resulting in an infinite cycle of incrementing, blanks pages. ().o
+        time.sleep(.5)
     
     # check against the cached url to see if we successfully advanced a page. If not, break
     if mostRecentURL == driver.current_url:

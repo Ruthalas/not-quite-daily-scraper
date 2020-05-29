@@ -113,13 +113,13 @@ while endLoop == False:
     if getImage == "True":
         imageLocation = comicImage[0].get_attribute('src')
 
-    # Get the file extension from the URL
-    URLpath = urlparse(imageLocation).path
-    ext = os.path.splitext(URLpath)[1]
+        # Get the file extension from the URL
+        URLpath = urlparse(imageLocation).path
+        ext = os.path.splitext(URLpath)[1]
 
-    # Get the original image name from the URL
-    urlParts = os.path.splitext(URLpath)[0].split("/")
-    originalImageName = urlParts[len(urlParts)-1] # (It's the last part when split on '/')
+        # Get the original image name from the URL
+        urlParts = os.path.splitext(URLpath)[0].split("/")
+        originalImageName = urlParts[len(urlParts)-1] # (It's the last part when split on '/')
     
     # Attempt to get the title text (if unavailable, use originalImageName)
     try:
@@ -140,12 +140,14 @@ while endLoop == False:
     imgSaveName = sanitizeString(imgSaveName)
     
     # Build the final file path for the image using the output dir, the image name, and the image extension
-    imgSavePathFull = os.path.join(outputPath, imgSaveName + ext)
+    if getImage == "True":
+        imgSavePathFull = os.path.join(outputPath, imgSaveName + ext)
     # Build a similar file path for the text content
     txtSavePathFull = os.path.join(outputPath, imgSaveName + ".html")
 
     print("  Comic Title: " + imageTitleText)
-    print("  Saving: " + imageLocation + "\n  To path: " + imgSavePathFull)
+    if getImage == "True":
+        print("  Saving: " + imageLocation + "\n  To path: " + imgSavePathFull)
 
     # If the user requested we get the comic image
     if getImage == "True":
@@ -155,7 +157,7 @@ while endLoop == False:
             with open(imgSavePathFull, 'wb') as workingFile:
                 response = requests.get(imageLocation, stream=True)
                 if not response.ok:
-                    print ("  Error saving image: " + response)
+                    print ("  Error saving image: " + response.text)
                 for block in response.iter_content(1024):
                     if not block:
                         break
@@ -218,7 +220,7 @@ while endLoop == False:
         # This sleep alleviates a scenario where the javaClick could cycle a page
         # without giving the page time to actually respond,
         # resulting in an infinite cycle of incrementing, blanks pages. ().o
-        time.sleep(.5)
+        time.sleep(1.5)
     
     # check against the cached url to see if we successfully advanced a page. If not, break
     if mostRecentURL == driver.current_url:

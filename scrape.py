@@ -111,7 +111,15 @@ while endLoop == False:
         else:
             comicCommentHTML = comicComment[0].get_attribute('innerHTML')
     if getImage == "True":
-        imageLocation = comicImage[0].get_attribute('src')
+        # Try to get the comic image URL
+        try:
+            imageLocation = comicImage[0].get_attribute('src')
+        except:
+            print("  Image not found.")
+            break            
+
+        # This is to address an issue in SmackJeeves comics (they append stuff to the image URL)
+        imageLocation = imageLocation.replace("/dims/optimize","")
 
         # Get the file extension from the URL
         URLpath = urlparse(imageLocation).path
@@ -146,11 +154,10 @@ while endLoop == False:
     txtSavePathFull = os.path.join(outputPath, imgSaveName + ".html")
 
     print("  Comic Title: " + imageTitleText)
-    if getImage == "True":
-        print("  Saving: " + imageLocation + "\n  To path: " + imgSavePathFull)
 
     # If the user requested we get the comic image
-    if getImage == "True":
+    if getImage == "True":       
+        print("  Saving: " + imageLocation + "\n  To path: " + imgSavePathFull)
         # If the image file we are about to write doesn't already exist...
         if not os.path.isfile(imgSavePathFull):
             # Write out the image file with the imgSavePathFull we built and the imageLocationn we found

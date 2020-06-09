@@ -86,8 +86,11 @@ else:
 # If we found the page, let's open it in Gecko to start our parsing
 driver.get(comicStartPage)
 
+# Clear the two variables we'll be using to check for repeated errors
+mostRecentURL = ""
+mostRecentImageURL = ""
+
 while endLoop == False:
-    
     # Get the URL of the current page, regardless of navigation method
     currentPageURL = driver.current_url
 
@@ -114,20 +117,23 @@ while endLoop == False:
         # Try to get the comic image URL
         try:
             imageLocation = comicImage[0].get_attribute('src')
+            
+            # This is to address an issue in SmackJeeves comics (they append stuff to the image URL)
+            imageLocation = imageLocation.replace("/dims/optimize","")
+
+            # Get the file extension from the URL
+            URLpath = urlparse(imageLocation).path
+            ext = os.path.splitext(URLpath)[1]
+
+            # Get the original image name from the URL
+            urlParts = os.path.splitext(URLpath)[0].split("/")
+            originalImageName = urlParts[len(urlParts)-1] # (It's the last part when split on '/')
         except:
-            print("  Image not found.")
-            break            
-
-        # This is to address an issue in SmackJeeves comics (they append stuff to the image URL)
-        imageLocation = imageLocation.replace("/dims/optimize","")
-
-        # Get the file extension from the URL
-        URLpath = urlparse(imageLocation).path
-        ext = os.path.splitext(URLpath)[1]
-
-        # Get the original image name from the URL
-        urlParts = os.path.splitext(URLpath)[0].split("/")
-        originalImageName = urlParts[len(urlParts)-1] # (It's the last part when split on '/')
+            # If we simply can't find the image, set the image-related variables to default values
+            print("  No image found on this page.")
+            imageLocation = ""
+            originalImageName = "FileName"
+            ext = ""
     
     # Attempt to get the title text (if unavailable, use originalImageName)
     try:
@@ -143,20 +149,29 @@ while endLoop == False:
     elif imageNameType == "originalFilename":
         # Set image save name to original image name (based on URL)
         imgSaveName = originalImageName
+    print("  Comic Title: " + imageTitleText)
     
     # Lets quickly remove any characters from that title that may cause issues later
     imgSaveName = sanitizeString(imgSaveName)
-    
+
     # Build the final file path for the image using the output dir, the image name, and the image extension
     if getImage == "True":
-        imgSavePathFull = os.path.join(outputPath, imgSaveName + ext)
+        # Double check that we actually found an image in the page
+        if imageLocation != "":
+            imgSavePathFull = os.path.join(outputPath, imgSaveName + ext)
+        else:
+            # If we didn't find an image, build an informative save path (to make a blank file)
+            imgSavePathFull = os.path.join(outputPath, imgSaveName + " (Image not found on site)" + ext)
     # Build a similar file path for the text content
     txtSavePathFull = os.path.join(outputPath, imgSaveName + ".html")
 
-    print("  Comic Title: " + imageTitleText)
+    # check against the cached imageLocation to see if we successfully found a new image. If not, break
+    if mostRecentImageURL == imageLocation:
+        print("\nScript failed to find images twice in a row. We've hit an error!")
+        break
 
     # If the user requested we get the comic image
-    if getImage == "True":       
+    if (getImage == "True") and (imageLocation != ""):       
         print("  Saving: " + imageLocation + "\n  To path: " + imgSavePathFull)
         # If the image file we are about to write doesn't already exist...
         if not os.path.isfile(imgSavePathFull):
@@ -173,6 +188,8 @@ while endLoop == False:
                 print("  Image saved.")
         else:
             print("  Image skipped. Found existing.")
+    elif (imageLocation == ""):
+        open(imgSavePathFull, 'a').close()
     
     # Clear out javascript warning from comment, if it is present
     comicCommentHTML = comicCommentHTML.replace("<noscript>Javascript is required to view this site. Please enable Javascript in your browser and reload this page.</noscript>","")
@@ -202,6 +219,7 @@ while endLoop == False:
     
     #cache the current URL to check against after we attempt to move to the next page
     mostRecentURL = driver.current_url
+    mostRecentImageURL = imageLocation
     
     # If the nextButtonType is a basic link, parse it out of the element and attempt to navigate there
     if nextButtonType == "link":

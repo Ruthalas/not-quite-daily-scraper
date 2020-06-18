@@ -130,9 +130,9 @@ while endLoop == False:
             originalImageName = urlParts[len(urlParts)-1] # (It's the last part when split on '/')
         except:
             # If we simply can't find the image, set the image-related variables to default values
-            print("  No image found on this page.")
+            print("  No image found on this page!")
             imageLocation = ""
-            originalImageName = "FileName"
+            originalImageName = "EmptyFileName"
             ext = ""
     
     # Attempt to get the title text (if unavailable, use originalImageName)
@@ -189,6 +189,7 @@ while endLoop == False:
         else:
             print("  Image skipped. Found existing.")
     elif (imageLocation == ""):
+        print("  Placeholder file created in place of missing image!")
         open(imgSavePathFull, 'a').close()
     
     # Clear out javascript warning from comment, if it is present

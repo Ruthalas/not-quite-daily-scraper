@@ -227,16 +227,22 @@ while endLoop == False:
         nextButtonURL = nextButton[0].get_attribute('href')
         currentPageURL = nextButtonURL
         
-        # First try the webpage and makes sure it returns a good error code
-        request = requests.get(nextButtonURL)
+        # First try requesting the webpage and make sure it returns a good status code
+        # If the attempt itself fails, return that error
+        try:
+            request = requests.get(nextButtonURL)
+        except Exception as errorCode:
+            request.status_code = errorCode
+        
+        # If the request was good, let the user know, if it was anything else, pass that error to the user and break
         if request.status_code == 200:
             # Nice! The page exists and returns a good code
             print('\nAccessing page: ' + nextButtonURL)
         else:
-            # If we can't find the current page, let the user know and break out of the while loop
+            # If we can't find the current page (or the attempt itself failed), let the user know and break out of the while loop
             print('\nPage unavailable: ' + nextButtonURL + "\nRequest yielded: " + str(request.status_code))
             break
-        # If we found the page, let's open it in Gecko to start our parsing
+        # If we didn't break, let's open it in Gecko to start our parsing
         driver.get(nextButtonURL)
         
     # If the nextButtonType is javaClick, instead of parsing the next object, just click it

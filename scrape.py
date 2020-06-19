@@ -231,16 +231,20 @@ while endLoop == False:
         # If the attempt itself fails, return that error
         try:
             request = requests.get(nextButtonURL)
+            requestResult = request.status_code
         except Exception as errorCode:
-            request.status_code = errorCode
+            requestResult = errorCode
+            # If the URL variable is entirely empty, make that clear
+            if nextButtonURL == None:
+                nextButtonURL = "No URL Passed!"
         
         # If the request was good, let the user know, if it was anything else, pass that error to the user and break
-        if request.status_code == 200:
+        if requestResult == 200:
             # Nice! The page exists and returns a good code
             print('\nAccessing page: ' + nextButtonURL)
         else:
             # If we can't find the current page (or the attempt itself failed), let the user know and break out of the while loop
-            print('\nPage unavailable: ' + nextButtonURL + "\nRequest yielded: " + str(request.status_code))
+            print('\nNext page unavailable: ' + str(nextButtonURL) + "\n  Request yielded: " + str(requestResult))
             break
         # If we didn't break, let's open it in Gecko to start our parsing
         driver.get(nextButtonURL)

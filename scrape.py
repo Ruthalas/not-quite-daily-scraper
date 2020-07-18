@@ -4,6 +4,7 @@ import requests
 import os
 import sys
 import time
+import urllib.request
 from urllib.parse import urlparse
 from selenium import webdriver
 
@@ -179,14 +180,23 @@ while endLoop == False:
             # Write out the image file with the imgSavePathFull we built and the imageLocationn we found
             with open(imgSavePathFull, 'wb') as workingFile:
                 response = requests.get(imageLocation, stream=True)
-                if not response.ok:
+
+                # If the image response is fine (200), download it
+                if response.ok:
+                    for block in response.iter_content(1024):
+                        if not block:
+                            break
+                        workingFile.write(block)
+                    workingFile.close()
+                    print("  Image saved.")
+                # Alternate download method to try if the image response itself also yields a 406 error
+                elif response.status_code == 406:
+                    r = urllib.request.urlopen(imageLocation)
+                    workingFile.write(r.read())
+                    print("  Image saved. (despite 406 response)")
+                else:
                     print ("  Error saving image: " + response.text)
-                for block in response.iter_content(1024):
-                    if not block:
-                        break
-                    workingFile.write(block)
-                workingFile.close()
-                print("  Image saved.")
+
         else:
             print("  Image skipped. Found existing.")
     elif (imageLocation == ""):

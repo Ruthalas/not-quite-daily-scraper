@@ -76,7 +76,7 @@ endLoop = False
 
 # Attempt to load the comicStartPage page, if successful begin loop, if not skip loop (end)
 request = requests.get(comicStartPage)
-if request.status_code == 200:
+if (request.status_code == 200) or (request.status_code == 406):
     # Nice! The page exists and returns a good code
     print('\nAccessing start page: ' + comicStartPage)
 else:
@@ -239,7 +239,7 @@ while endLoop == False:
                 nextButtonURL = "No URL Passed!"
         
         # If the request was good, let the user know, if it was anything else, pass that error to the user and break
-        if requestResult == 200:
+        if (request.status_code == 200) or (request.status_code == 406):
             # Nice! The page exists and returns a good code
             print('\nAccessing page: ' + nextButtonURL)
         else:

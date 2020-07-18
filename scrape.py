@@ -75,6 +75,7 @@ comicCommentHTML = ""
 endLoop = False
 
 # Attempt to load the comicStartPage page, if successful begin loop, if not skip loop (end)
+# Note: In the case of 406 errors, while something about the page is reported as 'not acceptable', the page will be served, and can therefore be scraped
 request = requests.get(comicStartPage)
 if (request.status_code == 200) or (request.status_code == 406):
     # Nice! The page exists and returns a good code
@@ -239,6 +240,7 @@ while endLoop == False:
                 nextButtonURL = "No URL Passed!"
         
         # If the request was good, let the user know, if it was anything else, pass that error to the user and break
+        # Note: In the case of 406 errors, while something about the page is reported as 'not acceptable', the page will be served, and can therefore be scraped
         if (request.status_code == 200) or (request.status_code == 406):
             # Nice! The page exists and returns a good code
             print('\nAccessing page: ' + nextButtonURL)

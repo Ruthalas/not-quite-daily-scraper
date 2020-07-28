@@ -5,7 +5,7 @@ Download comic images and author comments with ease, utilizing a simple config f
 
 Included example is for the '(not quite) Daily Comic'.
 
-Currently under development.
+Currently under development. Developed for Windows.
 
 ## Setup
 

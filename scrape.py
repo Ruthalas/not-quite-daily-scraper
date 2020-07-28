@@ -212,7 +212,7 @@ while endLoop == False:
         if not os.path.isfile(txtSavePathFull):
             # Write out a txt file with the comic title and author comment (and source URL) to the txtSavePathFull we built
             with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
-                textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p></center>" + comicCommentHTML 
+                textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p><img src=\"" + imgSaveName + ext + "\"></center>" + comicCommentHTML 
                 workingFile.write(textStr)
                 workingFile.close()
                 print("  Comment saved.")

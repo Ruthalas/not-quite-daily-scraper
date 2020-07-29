@@ -88,9 +88,12 @@ else:
 # If we found the page, let's open it in Gecko to start our parsing
 driver.get(comicStartPage)
 
-# Clear the two variables we'll be using to check for repeated errors
+# Clear the variables we'll be setting each loop to check for repeated errors, and build the 'next page' link 
 mostRecentURL = ""
 mostRecentImageURL = ""
+txtSavePathName = ""
+previousTxtSavePath = ""
+overwriteCount = 0
 
 while endLoop == False:
     # Get the URL of the current page, regardless of navigation method
@@ -156,6 +159,13 @@ while endLoop == False:
     # Lets quickly remove any characters from that title that may cause issues later
     imgSaveName = sanitizeString(imgSaveName)
 
+    # Prior to building the file paths (and resetting it), lets make note of the name of the previous file
+    # If it exists, make a nice link to it to use when we make the HTML page later, if not, indicate we are at the current page
+    if txtSavePathName == "":
+        nextPageHTML = "CURRENT"
+    else:
+        nextPageHTML = "<a href=\"" + txtSavePathName + "\">Next</a>"
+
     # Build the final file path for the image using the output dir, the image name, and the image extension
     if getImage == "True":
         # Double check that we actually found an image in the page
@@ -166,6 +176,7 @@ while endLoop == False:
             imgSavePathFull = os.path.join(outputPath, imgSaveName + " (Image not found on site)" + ext)
     # Build a similar file path for the text content
     txtSavePathFull = os.path.join(outputPath, imgSaveName + ".html")
+    txtSavePathName = imgSaveName + ".html"
 
     # check against the cached imageLocation to see if we successfully found a new image. If not, break
     if mostRecentImageURL == imageLocation:
@@ -207,17 +218,33 @@ while endLoop == False:
     comicCommentHTML = comicCommentHTML.replace("<noscript>Javascript is required to view this site. Please enable Javascript in your browser and reload this page.</noscript>","")
     
     # If the user has requested we get an author comment, and this particular strip has one, and it's new
-    if (getComments == "True") and (comicCommentHTML != "") and (comicCommentHTML != previousCommentHTML):
-        # If the text file we are about to write doesn't already exist...
-        if not os.path.isfile(txtSavePathFull):
+    if True: #(getComments == "True") and (comicCommentHTML != "") and (comicCommentHTML != previousCommentHTML):
+        
+        # Build the html string with the image, a link to the page online, the author comment if requested, and a link to the next page (previous page scraped)
+        htmlStyle = "<style>body {background-color: #cccccc}</style>"
+        htmlNav = "<a href=\"" + currentPageURL + "\">" + imageTitleText + "</a> | " + nextPageHTML
+        htmlImg = "<img src=\"" + imgSaveName + ext + "\">"
+        htmlTableStart = "<table width=\"70%\" style=\"margin-left:auto;margin-right:auto;\"><tr><td>"
+        htmlTableEnd = "</td></tr></table>"
+        # Combine html parts to make full string
+        textStr = htmlStyle + "<center>" + htmlNav + "<br>" + htmlImg + "<br>" + htmlNav + "<br></center>" + htmlTableStart + comicCommentHTML + htmlTableEnd
+
+        # If the file exists, and we haven't overwritten one yet, continue (This makes sure the latest page has a valid "Next" link)
+        if (os.path.isfile(txtSavePathFull) and (overwriteCount < 1)):
             # Write out a txt file with the comic title and author comment (and source URL) to the txtSavePathFull we built
             with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
-                textStr = "<center><p><a href=\"" + currentPageURL + "\">" + imageTitleText + "</a></p><img src=\"" + imgSaveName + ext + "\"></center>" + comicCommentHTML 
                 workingFile.write(textStr)
                 workingFile.close()
-                print("  Comment saved.")
-        else:
-            print("  Comment skipped. Found existing.")
+                print("  Page overwritten. Found existing.")
+                overwriteCount += 1
+        elif not os.path.isfile(txtSavePathFull):
+            # Write out a txt file with the comic title and author comment (and source URL) to the txtSavePathFull we built
+            with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
+                workingFile.write(textStr)
+                workingFile.close()
+                print("  Page saved.")
+        elif os.path.isfile(txtSavePathFull):
+            print("  Page skipped. Found existing.")
 
     # Time to try and navigate to the next page!
 
@@ -226,7 +253,7 @@ while endLoop == False:
     
     # If we found no matching (nextbutton) elements, break out of the loop
     if len(nextButton) < 1:
-        print("\nNo next page button found on this page.\nWe've likely hit the current page!")
+        print("\nNo next/previous page button found on this page.\nWe've likely hit the current page!")
         break
     
     #cache the current URL to check against after we attempt to move to the next page

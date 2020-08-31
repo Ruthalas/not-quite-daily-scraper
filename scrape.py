@@ -10,13 +10,13 @@ from selenium import webdriver
 
 # Replace various characters that would be illegal in a filename (Windows)
 def sanitizeString(stringToClean):
-    naughtyCharList = ['/','>','<',':','"','|','?','*','\\']
+    naughtyCharList = ['/','>','<',':','"','|','?','*','\\','#','–']
     replacementChar = "-"
     # Iterate through each naughty option and replace any instances of it in stringToClean
     for elem in naughtyCharList :
         # Check if string is in the main string
         if elem in stringToClean :
-            # Replace the string
+            # Replace the portion of the string that matches the neughty list
             stringToClean = stringToClean.replace(elem, replacementChar)
     return stringToClean
 

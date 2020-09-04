@@ -89,6 +89,7 @@ else:
 driver.get(comicStartPage)
 
 # Clear the variables we'll be setting each loop to check for repeated errors, and build the 'next page' link 
+secondMostRecentURL = ""
 mostRecentURL = ""
 mostRecentImageURL = ""
 txtSavePathName = ""
@@ -256,7 +257,8 @@ while endLoop == False:
         print("\nNo next/previous page button found on this page.\nWe've likely hit the current page!")
         break
     
-    #cache the current URL to check against after we attempt to move to the next page
+    #cascade cache the current URL to check against after we attempt to move to the next page (helps detect loops)
+    secondMostRecentURL = mostRecentURL
     mostRecentURL = driver.current_url
     mostRecentImageURL = imageLocation
     
@@ -297,9 +299,12 @@ while endLoop == False:
         # resulting in an infinite cycle of incrementing, blanks pages. ().o
         time.sleep(1.5)
     
-    # check against the cached url to see if we successfully advanced a page. If not, break
+    # check against the cached urls to see if we successfully advanced a page. If not, break
     if mostRecentURL == driver.current_url:
-        print("\nScript not successfully advancing pages.\nWe've either hit the current page or an error!")
+        print("\nScript not successfully advancing pages (stuck).\nWe've either hit the current page or an error!")
+        break
+    if secondMostRecentURL == driver.current_url:
+        print("\nScript not successfully advancing pages (looping).\nWe've likely hit an error!")
         break
 
 # Close browser

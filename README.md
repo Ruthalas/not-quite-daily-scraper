@@ -20,7 +20,7 @@ Download the following dependencies and install them to PATH (Windows):
 ## Usage
 Create and fill out a config file for each comic you want to scrape.
 
-Settings include:
+Settings/Configurables include:
 * Output Path (leave blank to use project directory)
 * Create Subfolder? (if enabled, creates subdir based on comic name)
 * Download Comments?

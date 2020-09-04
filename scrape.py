@@ -46,6 +46,7 @@ imageTitlePath = configparser.get('Comic', 'imageTitlePath')
 nextButtonPath = configparser.get('Comic', 'nextButtonPath')
 nextButtonType = configparser.get('Comic', 'nextButtonType')
 imagePath = configparser.get('Comic', 'imagePath')
+initialClick = configparser.get('Comic', 'initialClick')
 
 print("Config settings imported.")
 
@@ -87,6 +88,13 @@ else:
     endLoop = True
 # If we found the page, let's open it in Gecko to start our parsing
 driver.get(comicStartPage)
+
+# If the user requested we perform an initial click, do so!
+if (initialClick != ""):
+    initialClickContent = driver.find_elements_by_xpath(initialClick)
+    print(initialClickContent)
+    initialURL = initialClickContent[0].get_attribute('href')
+    driver.get(initialURL)
 
 # Clear the variables we'll be setting each loop to check for repeated errors, and build the 'next page' link 
 secondMostRecentURL = ""

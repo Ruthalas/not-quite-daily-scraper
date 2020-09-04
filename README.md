@@ -35,6 +35,7 @@ Settings/Configurables include:
 * nextButtonType (accepts either link or javaClick, representing whether the button has an href or must be clicked)
 * imagePath (XPATH)
 * commentPath (XPATH)
+* initialClick (XPATH, can be used to start at the comic's homepage and click into the latest page link)
 
 Then run:
 

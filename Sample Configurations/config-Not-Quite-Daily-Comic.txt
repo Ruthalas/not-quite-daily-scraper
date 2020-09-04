@@ -1,6 +1,6 @@
 [General]
 # Path to output directory (leave blank to use the project directory)
-outputPath = W:\DOCUMENT\COMICS (other)\(not quite) Daily Comic [Mr. Artist] (Running-NQDS)
+outputPath = W:\DOCUMENT\COMICS (other)\!TEMP\(not quite) Daily Comic [Mr. Artist] (Running-NQDS)
 # Create subfolder based on comic title? (True or False)
 subfolderToggle = False
 # Get author comments? (True or False)
@@ -16,14 +16,17 @@ runHeadless = False
 # What's the comic name? (used to make subfolder if enabled above)
 comicName = (not quite) Daily Comic
 # What is the first page you'd like to start traversing at? (consider setting to recent page if running updates)
-comicStartPage = https://www.truefork.org/Art/comic/cindex.php?816
+comicStartPage = https://www.truefork.org/Art/comic/cindex.php
 # XPATH to the image or page title
 imageTitlePath = //*[@id="frame"]/div[2]
 # XPATH to the next button
-nextButtonPath = //*[@id="frame"]/div[3]/div/center/table[2]/tbody/tr[1]/td[4]/a
+nextButtonPath = //*[@id="frame"]/div[3]/div/center/table[2]/tbody/tr[1]/td[2]/a
 # Next button type (link or javaClick)
 nextButtonType = link
 # XPATH to the comic image itself (optional, toggle off above if blank)
 imagePath = //*[@id="frame"]/div[3]/div/center/img
 # XPATH to the author comment, if applicable (optional, toggle off above if blank)
 commentPath = //*[@id="frame"]/div[4]
+# Click this element once prior to scrape (Leave blank if not needed)
+# This can be used to have the base URL be the homepage, and then click into the 'latest page' from there
+initialClick = 

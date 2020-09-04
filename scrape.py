@@ -92,8 +92,8 @@ driver.get(comicStartPage)
 # If the user requested we perform an initial click, do so!
 if (initialClick != ""):
     initialClickContent = driver.find_elements_by_xpath(initialClick)
-    print(initialClickContent)
     initialURL = initialClickContent[0].get_attribute('href')
+    print('Clicking initial-click: ' + initialURL)
     driver.get(initialURL)
 
 # Clear the variables we'll be setting each loop to check for repeated errors, and build the 'next page' link 
@@ -105,7 +105,7 @@ previousTxtSavePath = ""
 overwriteCount = 0
 
 while endLoop == False:
-    # Get the URL of the current page, regardless of navigation method
+    # Record the URL of the current page, regardless of navigation method
     currentPageURL = driver.current_url
 
     # Grab content elements based on the paths provided (skip ones the user has turned off)
@@ -218,7 +218,7 @@ while endLoop == False:
                     print ("  Error saving image: " + response.text)
 
         else:
-            print("  Image skipped. Found existing.")
+            print("  Found existing Image. skipped.")
     elif (imageLocation == ""):
         print("  Placeholder file created in place of missing image!")
         open(imgSavePathFull, 'a').close()
@@ -244,7 +244,7 @@ while endLoop == False:
             with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
                 workingFile.write(textStr)
                 workingFile.close()
-                print("  Page overwritten. Found existing.")
+                print("  Found existing page. Overwritten.")
                 overwriteCount += 1
         elif not os.path.isfile(txtSavePathFull):
             # Write out a txt file with the comic title and author comment (and source URL) to the txtSavePathFull we built
@@ -253,7 +253,7 @@ while endLoop == False:
                 workingFile.close()
                 print("  Page saved.")
         elif os.path.isfile(txtSavePathFull):
-            print("  Page skipped. Found existing.")
+            print("  Found existing page. Skipped.")
 
     # Time to try and navigate to the next page!
 

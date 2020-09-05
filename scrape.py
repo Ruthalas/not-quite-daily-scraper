@@ -44,6 +44,7 @@ def sanitizeString(stringToClean):
             stringToClean = stringToClean.replace(elem, replacementChar)
     return stringToClean
 
+# Check if the config file exists (If not, exit script)
 if not os.path.isfile(sys.argv[1]):
     print("Please provide a valid file for the config.\nYour provided: " + str(sys.argv[1]))
     raise SystemExit(0)
@@ -99,7 +100,7 @@ print("Browser created. Beginning to scrape " + comicName)
 comicCommentHTML = ""
 endLoop = False
 
-# Attempt to load the comicStartPage page, if successful begin loop, if not skip loop (end)
+# Attempt to load the comicStartPage page, if successful begin loop, if not skip loop (exit script)
 pageStatus = validLinkCheck(comicStartPage)
 if (pageStatus == "Good"):
     # Nice! The page exists and returns a good code

@@ -262,7 +262,7 @@ while endLoop == False:
     
     # If we found no matching (nextbutton) elements, break out of the loop
     if len(nextButton) < 1:
-        print("\nNo next/previous page button found on this page.\nWe've likely hit the current page!")
+        print("\nNo next/previous page button found on this page.\nWe've likely hit the end!")
         break
     
     #cascade cache the current URL to check against after we attempt to move to the next page (helps detect loops)

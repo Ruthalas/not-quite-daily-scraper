@@ -8,6 +8,30 @@ import urllib.request
 from urllib.parse import urlparse
 from selenium import webdriver
 
+# Check the status response of provided link
+# Return 'Good' if 200 or 406, return Null/None if provided empty string, otherwise return the error code
+def validLinkCheck(link):
+    # Reset values to None/Null
+    status = None
+    requestResult = None
+    # If they didn't send us an empty string, let's check it out
+    if (link != ""):
+        # Try requesting the webpage and see what it returns
+        try:
+            request = requests.get(link)
+            requestResult = request.status_code
+        except Exception as errorCode:
+            requestResult = errorCode
+    # Return 'Good' or an error code based on whether the status code was good or bad
+    # Note: In the case of 406 errors, while something about the page is reported as 'not acceptable', the page will be served, and can therefore be scraped (sometimes...? :/)
+    if (requestResult == 200) or (requestResult == 406):
+        # Nice! The page exists and returns a good code; return 'Good'
+        status = "Good"
+    else:
+        # Trying to access the URL failed for one reason or another; return that reason
+        status = str(requestResult)
+    return status
+
 # Replace various characters that would be illegal in a filename (Windows)
 def sanitizeString(stringToClean):
     naughtyCharList = ['/','>','<',':','"','|','?','*','\\','#','–']
@@ -19,7 +43,6 @@ def sanitizeString(stringToClean):
             # Replace the portion of the string that matches the neughty list
             stringToClean = stringToClean.replace(elem, replacementChar)
     return stringToClean
-
 
 if not os.path.isfile(sys.argv[1]):
     print("Please provide a valid file for the config.\nYour provided: " + str(sys.argv[1]))
@@ -77,14 +100,13 @@ comicCommentHTML = ""
 endLoop = False
 
 # Attempt to load the comicStartPage page, if successful begin loop, if not skip loop (end)
-# Note: In the case of 406 errors, while something about the page is reported as 'not acceptable', the page will be served, and can therefore be scraped
-request = requests.get(comicStartPage)
-if (request.status_code == 200) or (request.status_code == 406):
+pageStatus = validLinkCheck(comicStartPage)
+if (pageStatus == "Good"):
     # Nice! The page exists and returns a good code
     print('\nAccessing start page: ' + comicStartPage)
 else:
     # If we can't find the current page, let the user know and break out of the while loop
-    print('\nStart page unavailable: ' + comicStartPage + "\nRequest yielded: " + str(request.status_code))
+    print('\nStart page unavailable: ' + comicStartPage + "\nRequest yielded: " + pageStatus)
     endLoop = True
 # If we found the page, let's open it in Gecko to start our parsing
 driver.get(comicStartPage)
@@ -277,23 +299,14 @@ while endLoop == False:
         
         # First try requesting the webpage and make sure it returns a good status code
         # If the attempt itself fails, return that error
-        try:
-            request = requests.get(nextButtonURL)
-            requestResult = request.status_code
-        except Exception as errorCode:
-            requestResult = errorCode
-            # If the URL variable is entirely empty, make that clear
-            if nextButtonURL == None:
-                nextButtonURL = "No URL Passed!"
-        
+        pageStatus = validLinkCheck(nextButtonURL)
         # If the request was good, let the user know, if it was anything else, pass that error to the user and break
-        # Note: In the case of 406 errors, while something about the page is reported as 'not acceptable', the page will be served, and can therefore be scraped
-        if (request.status_code == 200) or (request.status_code == 406):
+        if (pageStatus == "Good"):
             # Nice! The page exists and returns a good code
             print('\nAccessing page: ' + nextButtonURL)
         else:
             # If we can't find the current page (or the attempt itself failed), let the user know and break out of the while loop
-            print('\nNext page unavailable: ' + str(nextButtonURL) + "\n  Request yielded: " + str(requestResult))
+            print('\nNext page unavailable: ' + str(nextButtonURL) + "\n  Request yielded: " + pageStatus)
             break
         # If we didn't break, let's open it in Gecko to start our parsing
         driver.get(nextButtonURL)

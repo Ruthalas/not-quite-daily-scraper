@@ -24,13 +24,13 @@ Create and fill out a config file for each comic you want to scrape.
 If you choose to use the HTML option (currently force-enabled, under construction) it is advised to start at the current page and iterate backwards to allow the script to link each page to the next.
 
 Settings/Configurables include:
+
 * Output Path (leave blank to use project directory)
 * Create Subfolder? (if enabled, creates subdir based on comic name)
 * Download Comments?
 * Download Image?
 * Image Naming (chose to base on either comic title or on original image name)
 * Run Headless? (run without showing the browser window- disable for troubleshooting)
-
 * Comic Name
 * comicStartPage (XPATH)
 * imageTitlePath (XPATH)

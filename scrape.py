@@ -100,7 +100,7 @@ print("Browser created. Beginning to scrape " + comicName)
 comicCommentHTML = ""
 endLoop = False
 
-# Attempt to load the comicStartPage page, if successful begin loop, if not skip loop (exit script)
+# Attempt to load the comicStartPage page, if successful begin loop, if not skip loop (exiting the script)
 pageStatus = validLinkCheck(comicStartPage)
 if (pageStatus == "Good"):
     # Nice! The page exists and returns a good code
@@ -126,6 +126,7 @@ mostRecentImageURL = ""
 txtSavePathName = ""
 previousTxtSavePath = ""
 overwriteCount = 0
+consecutiveSkipCount = 0
 
 while endLoop == False:
     # Record the URL of the current page, regardless of navigation method
@@ -220,6 +221,9 @@ while endLoop == False:
         print("  Saving: " + imageLocation + "\n  To path: " + imgSavePathFull)
         # If the image file we are about to write doesn't already exist...
         if not os.path.isfile(imgSavePathFull):
+            # Since we will try to save the image, reset the consecutiveSkipCount to zero
+            consecutiveSkipCount = 0
+
             # Write out the image file with the imgSavePathFull we built and the imageLocationn we found
             with open(imgSavePathFull, 'wb') as workingFile:
                 response = requests.get(imageLocation, stream=True)
@@ -242,6 +246,7 @@ while endLoop == False:
 
         else:
             print("  Found existing Image. skipped.")
+            consecutiveSkipCount = consecutiveSkipCount + 1
     elif (imageLocation == ""):
         print("  Placeholder file created in place of missing image!")
         open(imgSavePathFull, 'a').close()
@@ -321,12 +326,17 @@ while endLoop == False:
         # resulting in an infinite cycle of incrementing, blanks pages. ().o
         time.sleep(1.5)
     
-    # check against the cached urls to see if we successfully advanced a page. If not, break
+    # Check against the cached urls to see if we successfully advanced a page. If not, break
     if mostRecentURL == driver.current_url:
         print("\nScript not successfully advancing pages (stuck).\nWe've either hit the current page or an error!")
         break
     if secondMostRecentURL == driver.current_url:
         print("\nScript not successfully advancing pages (looping).\nWe've likely hit an error!")
+        break
+
+    # Check how many images we've skipped. If it's over 5, break
+    if (consecutiveSkipCount >= 5):
+        print("\nScript has skipped 5 consecutive image downloads.\nWe've likely reached existing archived content!")
         break
 
 # Close browser

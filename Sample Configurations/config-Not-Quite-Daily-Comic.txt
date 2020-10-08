@@ -11,6 +11,8 @@ getImage = True
 imageNameType = title
 # Hide the webbrowsing window while it runs? (True of False)
 runHeadless = False
+# Compose results into html pages with navigation (will include comments if enabled)
+buildHTML = True
 
 [Comic]
 # What's the comic name? (used to make subfolder if enabled above)

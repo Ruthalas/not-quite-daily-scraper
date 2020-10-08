@@ -62,6 +62,7 @@ getComments = configparser.get('General', 'getComments')
 getImage = configparser.get('General', 'getImage')
 imageNameType = configparser.get('General', 'imageNameType')
 runHeadless = configparser.get('General', 'runHeadless')
+buildHTML = configparser.get('General', 'buildHTML')
 # Comic group
 comicName = configparser.get('Comic', 'comicName')
 comicStartPage = configparser.get('Comic', 'comicStartPage')
@@ -254,8 +255,8 @@ while endLoop == False:
     # Clear out javascript warning from comment, if it is present
     comicCommentHTML = comicCommentHTML.replace("<noscript>Javascript is required to view this site. Please enable Javascript in your browser and reload this page.</noscript>","")
     
-    # If the user has requested we get an author comment, and this particular strip has one, and it's new
-    if True: #(getComments == "True") and (comicCommentHTML != "") and (comicCommentHTML != previousCommentHTML):
+    # If the user has requested we build an nice HTML page for the output
+    if (buildHTML == "True"):
         
         # Build the html string with the image, a link to the page online, the author comment if requested, and a link to the next page (previous page scraped)
         htmlStyle = "<style>body {background-color: #cccccc}</style>"

@@ -1,0 +1,34 @@
+[General]
+# Path to output directory (leave blank to use the project directory)
+outputPath = \\MARKUS-PC\MEDIA\DOCUMENT\COMICS (other)\!TEMP\Gravity Road [Sarah Petkus (spetku)] (Running NQDS)
+# Create subfolder based on comic title? (True or False)
+subfolderToggle = False
+# Get author comments? (True or False)
+getComments = False
+# Get commic image? (True or False)
+getImage = True
+# Name image by? (title or originalFilename)
+imageNameType = originalFilename
+# Hide the webbrowsing window while it runs? (True or False)
+runHeadless = True
+# Compose results into html pages with navigation (will include comments if enabled)
+buildHTML = True
+
+[Comic]
+# What's the comic name? (used to make subfolder if enabled above)
+comicName = Gravity Road
+# What is the first page you'd like to start traversing at? (consider setting to recent page if running updates)
+comicStartPage = http://gravityroad.zoness.com/
+# XPATH to the image or page title
+imageTitlePath = 
+# XPATH to the next button
+nextButtonPath = //*[@id="sidebar-under-comic"]/div[1]/table/tbody/tr/td[1]/a[2]
+# Next button type (link or javaClick)
+nextButtonType = link
+# XPATH to the comic image itself (optional, toggle off above if blank)
+imagePath = /html/body/div[1]/div[2]/div/div/div[1]/div[2]/div/a/img
+# XPATH to the author comment, if applicable (optional, toggle off above if blank)
+commentPath = 
+# Click this element once prior to scrape (Leave blank if not needed)
+# This can be used to have the base URL be the homepage, and then click into the 'latest page' from there
+initialClick = //*[@id="sidebar-under-comic"]/div[1]/table/tbody/tr/td[1]/a[2]

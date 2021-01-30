@@ -121,8 +121,7 @@ if (initialClick != ""):
     driver.get(initialURL)
 
 # Clear the variables we'll be setting each loop to check for repeated errors, and build the 'next page' link 
-secondMostRecentURL = ""
-mostRecentURL = ""
+seenURLs = []
 mostRecentImageURL = ""
 txtSavePathName = ""
 previousTxtSavePath = ""
@@ -295,8 +294,7 @@ while endLoop == False:
         break
     
     #cascade cache the current URL to check against after we attempt to move to the next page (helps detect loops)
-    secondMostRecentURL = mostRecentURL
-    mostRecentURL = driver.current_url
+    seenURLs.insert(len(seenURLs),driver.current_url)
     mostRecentImageURL = imageLocation
     
     # If the nextButtonType is a basic link, parse it out of the element and attempt to navigate there
@@ -328,10 +326,7 @@ while endLoop == False:
         time.sleep(1.5)
     
     # Check against the cached urls to see if we successfully advanced a page. If not, break
-    if mostRecentURL == driver.current_url:
-        print("\nScript not successfully advancing pages (stuck).\nWe've either hit the current page or an error!")
-        break
-    if secondMostRecentURL == driver.current_url:
+    if driver.current_url in seenURLs:
         print("\nScript not successfully advancing pages (looping).\nWe've likely hit an error!")
         break
 

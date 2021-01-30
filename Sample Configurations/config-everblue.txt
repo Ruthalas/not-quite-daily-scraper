@@ -1,0 +1,34 @@
+[General]
+# Path to output directory (leave blank to use the project directory)
+outputPath = \\MARKUS-PC\MEDIA\DOCUMENT\COMICS (other)\!TEMP\Everblue [Michael Sexton (Blue-Ten)] (Running-NQDS)
+# Create subfolder based on comic title? (True or False)
+subfolderToggle = False
+# Get author comments? (True or False)
+getComments = True
+# Get commic image? (True or False)
+getImage = True
+# Name image by? (title or originalFilename)
+imageNameType = originalFilename
+# Hide the webbrowsing window while it runs? (True or False)
+runHeadless = True
+# Compose results into html pages with navigation (will include comments if enabled)
+buildHTML = True
+
+[Comic]
+# What's the comic name? (used to make subfolder if enabled above)
+comicName = Everblue
+# What is the first page you'd like to start traversing at? (consider setting to recent page if running updates)
+comicStartPage = http://www.everblue-comic.com/
+# XPATH to the image or page title
+imageTitlePath = /html/body/div[1]/main/header/h4[1]
+# XPATH to the next button
+nextButtonPath = /html/body/div[1]/main/nav/ul/li[2]/a
+# Next button type (link or javaClick)
+nextButtonType = link
+# XPATH to the comic image itself (optional, toggle off above if blank)
+imagePath = /html/body/div[1]/main/article[1]/figure/a[1]/img
+# XPATH to the author comment, if applicable (optional, toggle off above if blank)
+commentPath = /html/body/div[1]/main/article[2]/div[1]
+# Click this element once prior to scrape (Leave blank if not needed)
+# This can be used to have the base URL be the homepage, and then click into the 'latest page' from there
+initialClick = //*[@id="homelinks2"]/b/a[2]

@@ -1,0 +1,34 @@
+[General]
+# Path to output directory (leave blank to use the project directory)
+outputPath = \\markus-pc\MEDIA\DOCUMENT\COMICS (other)\!TEMP\Fey Winds [Nicole Chartrand (Mocha Zombie)] (Running-NQDS)
+# Create subfolder based on comic title? (True or False)
+subfolderToggle = False
+# Get author comments? (True or False)
+getComments = True
+# Get commic image? (True or False)
+getImage = True
+# Name image by? (title or originalFilename)
+imageNameType = title
+# Hide the webbrowsing window while it runs? (True or False)
+runHeadless = True
+# Compose results into html pages with navigation (will include comments if enabled)
+buildHTML = True
+
+[Comic]
+# What's the comic name? (used to make subfolder if enabled above)
+comicName = Fey Winds
+# What is the first page you'd like to start traversing at? (consider setting to recent page if running updates)
+comicStartPage = https://www.feywinds.com/
+# XPATH to the image or page title
+imageTitlePath = /html/body/div[1]/div/main/article/header/div/a[1]/time
+# XPATH to the next button
+nextButtonPath = //*[@id="mgsisk_webcomic_collection_widget_previouswebcomiclink-2"]/a
+# Next button type (link or javaClick)
+nextButtonType = link
+# XPATH to the comic image itself (optional, toggle off above if blank)
+imagePath = /html/body/div/div/div[1]/div[1]/a/img
+# XPATH to the author comment, if applicable (optional, toggle off above if blank)
+commentPath = /html/body/div/div/main/article/div
+# Click this element once prior to scrape (Leave blank if not needed)
+# This can be used to have the base URL be the homepage, and then click into the 'latest page' from there
+initialClick = 

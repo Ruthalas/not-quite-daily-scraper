@@ -273,11 +273,19 @@ while endLoop == False:
         # Build the html string with the image, a link to the page online, the author comment if requested, and a link to the next page (previous page scraped)
         htmlStyle = "<style>body {background-color: #cccccc}</style>"
         htmlNav = "<a href=\"" + currentPageURL + "\">" + imageTitleText + "</a> | " + nextPageHTML
-        htmlImg = "<img src=\"" + imgSaveName + ext + "\">"
+        htmlImg = "<img id=\"comicImage\" src=\"\">"
         htmlTableStart = "<table width=\"70%\" style=\"margin-left:auto;margin-right:auto;\"><tr><td>"
         htmlTableEnd = "</td></tr></table>"
+        htmlScipt1 = "<script>"
+        htmlScipt2 = "nameStr = window.location.href;"
+        htmlScipt3 = "nameStr = nameStr.split('/');"
+        htmlScipt4 = "nameStr = nameStr.pop();"
+        htmlScipt5 = "nameStr = nameStr.replace(\".html\",\"\")"
+        htmlScipt6 = "nameStr = nameStr + \".jpg\""
+        htmlScipt7 = "document.getElementById(\"comicImage\").src = nameStr;"
+        htmlScipt8 = "</script>"
         # Combine html parts to make full string
-        textStr = htmlStyle + "<center>" + htmlNav + "<br>" + htmlImg + "<br>" + htmlNav + "<br></center>" + htmlTableStart + comicCommentHTML + htmlTableEnd
+        textStr = htmlStyle +"\n"+ "<center>" +"\n"+ htmlNav +"\n"+ "<br>" +"\n"+ htmlImg +"\n"+ "<br>" +"\n"+ htmlNav +"\n"+ "<br></center>" +"\n"+ htmlTableStart +"\n"+ comicCommentHTML +"\n"+ htmlTableEnd +"\n"+ htmlScipt1 +"\n"+ htmlScipt2 +"\n"+ htmlScipt3 +"\n"+ htmlScipt4 +"\n"+ htmlScipt5 +"\n"+ htmlScipt6 +"\n"+ htmlScipt7 +"\n"+ htmlScipt8
 
         # If the file exists, and we haven't overwritten one yet, continue (This makes sure the latest page has a valid "Next" link)
         if (os.path.isfile(txtSavePathFull) and (overwriteCount < 1)):

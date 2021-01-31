@@ -181,15 +181,24 @@ while endLoop == False:
             originalImageName = "EmptyFileName"
             ext = ""
     
-    # Attempt to get the title text (if unavailable, use originalImageName)
+    # Attempt to get the title text for text/link/datetime attributes of provides object (if unavailable, use originalImageName)
     try:
         if (imageTitle[0].text != ""):
             imageTitleText = imageTitle[0].text
-        elif (imageTitle[0].get_attribute('href') != ""):
-            imageTitleText = imageTitle[0].get_attribute('href')
-        else:
-            raise ValueError("Got an empty string when parsing the title as both a link and text. Bummer.")
     except:
+        imageTitleText = ""
+    try:
+        if (imageTitle[0].get_attribute('href') != ""):
+            imageTitleText = imageTitle[0].get_attribute('href')
+    except:
+        imageTitleText = ""
+    try:
+        if (imageTitle[0].get_attribute('datetime') != ""):
+            imageTitleText = imageTitle[0].get_attribute('datetime')
+    except:
+        imageTitleText = ""
+    # If none of the above worked, fall back to image filename
+    if (imageTitleText == ""):
         print("  Image title not found, substituting original image filename")
         imageTitleText = originalImageName
 

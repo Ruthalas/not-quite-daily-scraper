@@ -198,7 +198,7 @@ while endLoop == False:
     except:
         imageTitleText = ""
     # If none of the above worked, fall back to image filename
-    if (imageTitleText == ""):
+    if (imageTitleText == "") or (imageTitleText is None):
         print("  Image title not found, substituting original image filename")
         imageTitleText = originalImageName
 

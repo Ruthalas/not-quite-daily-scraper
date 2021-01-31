@@ -175,7 +175,12 @@ while endLoop == False:
     
     # Attempt to get the title text (if unavailable, use originalImageName)
     try:
-        imageTitleText = imageTitle[0].text
+        if (imageTitle[0].text != ""):
+            imageTitleText = imageTitle[0].text
+        elif (imageTitle[0].get_attribute('href') != ""):
+            imageTitleText = imageTitle[0].get_attribute('href')
+        else:
+            raise ValueError("Got an empty string when parsing the title as both a link and text. Bummer.")
     except:
         print("  Image title not found, substituting original image filename")
         imageTitleText = originalImageName
@@ -206,7 +211,7 @@ while endLoop == False:
             imgSavePathFull = os.path.join(outputPath, imgSaveName + ext)
         else:
             # If we didn't find an image, build an informative save path (to make a blank file)
-            imgSavePathFull = os.path.join(outputPath, imgSaveName + " (Image not found on site)" + ext)
+            imgSavePathFull = os.path.join(outputPath, imgSaveName + ".missing")
     # Build a similar file path for the text content
     txtSavePathFull = os.path.join(outputPath, imgSaveName + ".html")
     txtSavePathName = imgSaveName + ".html"

@@ -285,7 +285,7 @@ while endLoop == False:
             with open(txtSavePathFull, 'w', encoding="utf-8") as workingFile:
                 workingFile.write(textStr)
                 workingFile.close()
-                print("  Found existing page. Overwritten.")
+                print("  Found existing page. Overwritten to create link to new pages.")
                 overwriteCount += 1
         elif not os.path.isfile(txtSavePathFull):
             # Write out a txt file with the comic title and author comment (and source URL) to the txtSavePathFull we built

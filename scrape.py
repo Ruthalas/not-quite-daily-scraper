@@ -122,7 +122,7 @@ if (initialClick != ""):
 
 # Clear the variables we'll be setting each loop to check for repeated errors, and build the 'next page' link 
 seenURLs = []
-mostRecentImageURL = ""
+mostRecentImageURL = "-"
 txtSavePathName = ""
 previousTxtSavePath = ""
 overwriteCount = 0

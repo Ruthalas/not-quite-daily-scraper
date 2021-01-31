@@ -1,6 +1,6 @@
 [General]
 # Path to output directory (leave blank to use the project directory)
-outputPath = \\MARKUS-PC\MEDIA\DOCUMENT\COMICS (other)\!TEMP\Everblue [Michael Sexton (Blue-Ten)] (Running-NQDS)
+outputPath = \\path\Everblue [Michael Sexton (Blue-Ten)] (Running-NQDS)
 # Create subfolder based on comic title? (True or False)
 subfolderToggle = False
 # Get author comments? (True or False)

@@ -1,6 +1,6 @@
 [General]
 # Path to output directory (leave blank to use the project directory)
-outputPath = \\MARKUS-PC\MEDIA\DOCUMENT\COMICS (other)\!TEMP\Gravity Road [Sarah Petkus (spetku)] (Running NQDS)
+outputPath = \\path\Gravity Road [Sarah Petkus (spetku)] (Running NQDS)
 # Create subfolder based on comic title? (True or False)
 subfolderToggle = False
 # Get author comments? (True or False)

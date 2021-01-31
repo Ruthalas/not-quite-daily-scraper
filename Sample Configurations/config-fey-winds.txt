@@ -1,6 +1,6 @@
 [General]
 # Path to output directory (leave blank to use the project directory)
-outputPath = \\markus-pc\MEDIA\DOCUMENT\COMICS (other)\!TEMP\Fey Winds [Nicole Chartrand (Mocha Zombie)] (Running-NQDS)
+outputPath = \\path\Fey Winds [Nicole Chartrand (Mocha Zombie)] (Running-NQDS)
 # Create subfolder based on comic title? (True or False)
 subfolderToggle = False
 # Get author comments? (True or False)

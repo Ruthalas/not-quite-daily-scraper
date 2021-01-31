@@ -115,10 +115,18 @@ driver.get(comicStartPage)
 
 # If the user requested we perform an initial click, do so!
 if (initialClick != ""):
-    initialClickContent = driver.find_elements_by_xpath(initialClick)
-    initialURL = initialClickContent[0].get_attribute('href')
-    print('Clicking initial-click: ' + initialURL)
-    driver.get(initialURL)
+    try:
+        initialClickContent = driver.find_elements_by_xpath(initialClick)
+        initialURL = initialClickContent[0].get_attribute('href')
+        print('Clicking initial-click: ' + initialURL)
+        driver.get(initialURL)
+    except:
+        javaInitialButton = initialClickContent[0].click()
+        print('Clicking initial-click: ' + driver.current_url)
+        # This sleep alleviates a scenario where the javaClick could cycle a page
+        # without giving the page time to actually respond,
+        # resulting in an infinite cycle of incrementing, blanks pages. ().o
+        time.sleep(1.5)
 
 # Clear the variables we'll be setting each loop to check for repeated errors, and build the 'next page' link 
 seenURLs = []

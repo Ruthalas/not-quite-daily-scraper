@@ -327,7 +327,7 @@ while endLoop == False:
     
     # Check against the cached urls to see if we successfully advanced a page. If not, break
     if driver.current_url in seenURLs:
-        print("\nScript not successfully advancing pages (looping).\nWe've likely hit an error!")
+        print("\nScript not successfully advancing pages (looping).\nWe've likely hit an error or the end/beginning!")
         break
 
     # Check how many images we've skipped. If it's over 5, break

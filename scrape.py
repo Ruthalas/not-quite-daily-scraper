@@ -1,11 +1,13 @@
 # Import modules we will be using
 import configparser
 import requests
+import mimetypes
 import os
 import sys
 import time
 import urllib.request
 from urllib.parse import urlparse
+from urllib.parse import unquote
 from selenium import webdriver
 
 # Check the status response of provided link
@@ -34,7 +36,7 @@ def validLinkCheck(link):
 
 # Replace various characters that would be illegal in a filename (Windows)
 def sanitizeString(stringToClean):
-    naughtyCharList = ['/','>','<',':','"','|','?','*','\\','#','–']
+    naughtyCharList = ['/','>','<',':','"','|','?','*','\\','#','–','\n','\r']
     replacementChar = "-"
     # Iterate through each naughty option and replace any instances of it in stringToClean
     for elem in naughtyCharList :
@@ -121,12 +123,16 @@ if (initialClick != ""):
         print('Clicking initial-click: ' + initialURL)
         driver.get(initialURL)
     except:
-        javaInitialButton = initialClickContent[0].click()
-        print('Clicking initial-click: ' + driver.current_url)
-        # This sleep alleviates a scenario where the javaClick could cycle a page
-        # without giving the page time to actually respond,
-        # resulting in an infinite cycle of incrementing, blanks pages. ().o
-        time.sleep(1.5)
+        try:
+            javaInitialButton = initialClickContent[0].click()
+            print('Clicking initial-click: ' + driver.current_url)
+            # This sleep alleviates a scenario where the javaClick could cycle a page
+            # without giving the page time to actually respond,
+            # resulting in an infinite cycle of incrementing, blanks pages. ().o
+            time.sleep(1.5)
+        except:
+            print('  Initialclick failed. Ending.')
+            endLoop = True
 
 # Clear the variables we'll be setting each loop to check for repeated errors, and build the 'next page' link 
 seenURLs = []
@@ -183,20 +189,26 @@ while endLoop == False:
     
     # Attempt to get the title text for text/link/datetime attributes of provides object (if unavailable, use originalImageName)
     try:
-        if (imageTitle[0].text != ""):
-            imageTitleText = imageTitle[0].text
-    except:
-        imageTitleText = ""
-    try:
-        if (imageTitle[0].get_attribute('href') != ""):
-            imageTitleText = imageTitle[0].get_attribute('href')
-    except:
-        imageTitleText = ""
-    try:
         if (imageTitle[0].get_attribute('datetime') != ""):
             imageTitleText = imageTitle[0].get_attribute('datetime')
     except:
-        imageTitleText = ""
+        print('  imageTitle object is not date.')
+
+    if (imageTitleText == "") or (imageTitleText is None):
+        try:
+            if (imageTitle[0].text != ""):
+                imageTitleText = imageTitle[0].text
+        except:
+            print('  imageTitle object is not text.')
+
+    if (imageTitleText == "") or (imageTitleText is None):
+        try:
+            if (imageTitle[0].get_attribute('href') != ""):
+                imageTitleText = imageTitle[0].get_attribute('href')
+        except:
+            print('  imageTitle object is not link.')
+
+
     # If none of the above worked, fall back to image filename
     if (imageTitleText == "") or (imageTitleText is None):
         print("  Image title not found, substituting original image filename")
@@ -209,10 +221,10 @@ while endLoop == False:
     elif imageNameType == "originalFilename":
         # Set image save name to original image name (based on URL)
         imgSaveName = originalImageName
-    print("  Comic Title: " + imageTitleText)
     
     # Lets quickly remove any characters from that title that may cause issues later
     imgSaveName = sanitizeString(imgSaveName)
+    print("  Comic Title: " + imgSaveName)
 
     # Prior to building the file paths (and resetting it), lets make note of the name of the previous file
     # If it exists, make a nice link to it to use when we make the HTML page later, if not, indicate we are at the current page
@@ -290,11 +302,12 @@ while endLoop == False:
         htmlScipt3 = "nameStr = nameStr.split('/');"
         htmlScipt4 = "nameStr = nameStr.pop();"
         htmlScipt5 = "nameStr = nameStr.replace(\".html\",\"\")"
-        htmlScipt6 = "nameStr = nameStr + \".jpg\""
+        htmlScipt9 = "nameStr = decodeURI(nameStr)"
+        htmlScipt6 = "nameStr = nameStr + \"" + ext + "\""
         htmlScipt7 = "document.getElementById(\"comicImage\").src = nameStr;"
         htmlScipt8 = "</script>"
         # Combine html parts to make full string
-        textStr = htmlStyle +"\n"+ "<center>" +"\n"+ htmlNav +"\n"+ "<br>" +"\n"+ htmlImg +"\n"+ "<br>" +"\n"+ htmlNav +"\n"+ "<br></center>" +"\n"+ htmlTableStart +"\n"+ comicCommentHTML +"\n"+ htmlTableEnd +"\n"+ htmlScipt1 +"\n"+ htmlScipt2 +"\n"+ htmlScipt3 +"\n"+ htmlScipt4 +"\n"+ htmlScipt5 +"\n"+ htmlScipt6 +"\n"+ htmlScipt7 +"\n"+ htmlScipt8
+        textStr = htmlStyle +"\n"+ "<center>" +"\n"+ htmlNav +"\n"+ "<br>" +"\n"+ htmlImg +"\n"+ "<br>" +"\n"+ htmlNav +"\n"+ "<br></center>" +"\n"+ htmlTableStart +"\n"+ comicCommentHTML +"\n"+ htmlTableEnd +"\n"+ htmlScipt1 +"\n"+ htmlScipt2 +"\n"+ htmlScipt3 +"\n"+ htmlScipt4 +"\n"+ htmlScipt5 +"\n"+ htmlScipt9 +"\n"+ htmlScipt6 +"\n"+ htmlScipt7 +"\n"+ htmlScipt8
 
         # If the file exists, and we haven't overwritten one yet, continue (This makes sure the latest page has a valid "Next" link)
         if (os.path.isfile(txtSavePathFull) and (overwriteCount < 1)):

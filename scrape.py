@@ -188,6 +188,7 @@ while endLoop == False:
             ext = ""
     
     # Attempt to get the title text for text/link/datetime attributes of provides object (if unavailable, use originalImageName)
+    imageTitleText = ""
     try:
         if (imageTitle[0].get_attribute('datetime') != ""):
             imageTitleText = imageTitle[0].get_attribute('datetime')
@@ -221,6 +222,9 @@ while endLoop == False:
     elif imageNameType == "originalFilename":
         # Set image save name to original image name (based on URL)
         imgSaveName = originalImageName
+    elif imageNameType == "both":
+        # Set image save name to both!
+        imgSaveName = imageTitleText + " - " + originalImageName
     
     # Lets quickly remove any characters from that title that may cause issues later
     imgSaveName = sanitizeString(imgSaveName)
@@ -287,7 +291,7 @@ while endLoop == False:
     
     # Clear out javascript warning from comment, if it is present
     comicCommentHTML = comicCommentHTML.replace("<noscript>Javascript is required to view this site. Please enable Javascript in your browser and reload this page.</noscript>","")
-    
+
     # If the user has requested we build an nice HTML page for the output
     if (buildHTML == "True"):
         

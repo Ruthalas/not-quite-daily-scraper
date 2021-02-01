@@ -297,7 +297,7 @@ while endLoop == False:
         
         # Build the html string with the image, a link to the page online, the author comment if requested, and a link to the next page (previous page scraped)
         htmlStyle = "<style>body {background-color: #cccccc}</style>"
-        htmlNav = "<a href=\"" + currentPageURL + "\">" + imageTitleText + "</a> | " + nextPageHTML
+        htmlNav = "<a href=\"" + currentPageURL + "\">" + imgSaveName + "</a> | " + nextPageHTML
         htmlImg = "<img id=\"comicImage\" src=\"\">"
         htmlTableStart = "<table width=\"70%\" style=\"margin-left:auto;margin-right:auto;\"><tr><td>"
         htmlTableEnd = "</td></tr></table>"

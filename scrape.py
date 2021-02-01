@@ -193,21 +193,21 @@ while endLoop == False:
         if (imageTitle[0].get_attribute('datetime') != ""):
             imageTitleText = imageTitle[0].get_attribute('datetime')
     except:
-        print('  imageTitle object is not date.')
+        pass
 
     if (imageTitleText == "") or (imageTitleText is None):
         try:
             if (imageTitle[0].text != ""):
                 imageTitleText = imageTitle[0].text
         except:
-            print('  imageTitle object is not text.')
+            pass
 
     if (imageTitleText == "") or (imageTitleText is None):
         try:
             if (imageTitle[0].get_attribute('href') != ""):
                 imageTitleText = imageTitle[0].get_attribute('href')
         except:
-            print('  imageTitle object is not link.')
+            pass
 
 
     # If none of the above worked, fall back to image filename

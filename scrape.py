@@ -210,8 +210,8 @@ while endLoop == False:
             pass
 
 
-    # If none of the above worked, fall back to image filename
-    if (imageTitleText == "") or (imageTitleText is None):
+    # If none of the above worked, fall back to image filename- tell this to the user if the requested the title
+    if ((imageTitleText == "") or (imageTitleText is None)) and (imageNameType == "title"):
         print("  Image title not found, substituting original image filename")
         imageTitleText = originalImageName
 
